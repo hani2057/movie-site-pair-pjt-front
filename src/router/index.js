@@ -14,6 +14,12 @@ const routes = [
     path: "/",
     name: "main",
     component: MainView,
+    // children: [
+    //   {
+    //     path: 'action',
+    //     component:
+    //   }
+    // ]
   },
   {
     path: "/detail/:id",
