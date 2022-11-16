@@ -15,7 +15,7 @@
           :key="movie.id"
           :class="`row__poster ${isLargeRow && row__posterLarge}`"
           :src="`https://image.tmdb.org/t/p/original/${
-            isLargeRow ? movie.poster_path : movie.backdrop_path
+            isLargeRow ? movie.poster_path : movie?.backdrop_path
           } `"
           :alt="movie.name"
           @click="handleClick(movie)"
@@ -58,13 +58,19 @@ export default {
     },
   },
   created() {
+    let baseURL = this.$store.state.baseUrlTMDB;
+    if (this.id === "MR") {
+      baseURL = this.$store.state.baseUrlLocalServer;
+    }
+
     axios({
       method: "get",
-      url: `${this.$store.state.baseURL}${this.fetchUrl}`,
-      params: this.$store.state.params,
+      url: `${baseURL}${this.fetchUrl}`,
+      params: this.$store.state.paramsTMDB,
     })
       .then((res) => {
-        this.movies = res.data.results;
+        this.movies = res.data.results || res.data;
+        // this.movies = res.data;
       })
       .catch((err) => console.error(err));
   },
@@ -157,6 +163,7 @@ h2 {
   margin-right: 10px;
   transition: transform 450ms;
   border-radius: 4px;
+  margin-bottom: 10px;
 }
 .row__poster:hover {
   transform: scale(1.08);
