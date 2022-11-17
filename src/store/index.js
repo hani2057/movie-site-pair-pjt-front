@@ -6,6 +6,9 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
+    // 유저 관련
+    token: null,
+
     // 공통 CONSTANTS
     BG_COLOR: "#19191c",
     TEXT_COLOR: "#dee1e4",
@@ -33,6 +36,10 @@ export default new Vuex.Store({
     // },
   },
   mutations: {
+    SAVE_TOKEN(state, token) {
+      state.token = token;
+      // router.push({ name: "ArticleView" });
+    },
     CHANGE_MODAL_OPEN_STATE(state) {
       state.isModalOpened = !state.isModalOpened;
     },
@@ -41,6 +48,23 @@ export default new Vuex.Store({
     },
   },
   actions: {
+    signUp(context, payload) {
+      axios({
+        method: "post",
+        url: `${context.state.baseUrlLocalServer}/accounts/signup/`,
+        data: {
+          username: payload.username,
+          password1: payload.password1,
+          password2: payload.password2,
+          nick_name: payload.nickname,
+          age: payload.age,
+        },
+      }).then((res) => {
+        // console.log(res)
+        context.commit("SAVE_TOKEN", res.data.key);
+      });
+    },
+
     getSingleMovieData(context, movieId) {
       axios({
         method: "get",
