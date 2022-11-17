@@ -2,13 +2,7 @@
   <div>
     <section className="row">
       <h3>{{ title }}</h3>
-      <div class="slider">
-        <div class="slider__arrow-left">
-          <span class="arrow" @click="slideLeft">
-            <i class="fa-solid fa-less-than"></i>
-          </span>
-        </div>
-      </div>
+
       <div :id="this.id" class="row__posters">
         <b-container fluid>
           <b-row>
@@ -21,21 +15,14 @@
               :key="movie.id"
             >
               <img
-                :class="`row__poster ${isLargeRow && row__posterLarge}`"
-                :src="`https://image.tmdb.org/t/p/original/${
-                  isLargeRow ? movie.poster_path : movie.backdrop_path
-                } `"
+                class="row__poster"
+                :src="`https://image.tmdb.org/t/p/original/${movie.backdrop_path} `"
                 :alt="movie.name"
-                @click="handleClick(movie)"
+                @click="handleMovieClick(movie)"
               />
             </b-col>
           </b-row>
         </b-container>
-      </div>
-      <div class="slider__arrow-right">
-        <span class="arrow" @click="slideRight">
-          <i class="fa-solid fa-greater-than"></i>
-        </span>
       </div>
     </section>
   </div>
@@ -57,14 +44,8 @@ export default {
     };
   },
   methods: {
-    slideLeft() {
-      document.getElementById(this.id).scrollLeft -= window.innerWidth - 80;
-    },
-    slideRight() {
-      document.getElementById(this.id).scrollLeft += window.innerWidth - 80;
-    },
-    handleClick(movie) {
-      this.$router.push({ name: "detail", params: { id: movie.id } });
+    handleMovieClick(movie) {
+      this.$store.dispatch("handleMovieClick", movie);
     },
   },
   created() {

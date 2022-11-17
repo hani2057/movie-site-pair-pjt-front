@@ -14,11 +14,11 @@
           v-for="movie in this.movies"
           :key="movie.id"
           :class="`row__poster ${isLargeRow && row__posterLarge}`"
-          :src="`https://image.tmdb.org/t/p/original/${
+          :src="`${baseUrlTMDBImg}${
             isLargeRow ? movie.poster_path : movie?.backdrop_path
           } `"
           :alt="movie.name"
-          @click="handleClick(movie)"
+          @click="handleMovieClick(movie)"
         />
       </div>
       <div class="slider__arrow-right">
@@ -46,6 +46,11 @@ export default {
       movies: [],
     };
   },
+  computed: {
+    baseUrlTMDBImg() {
+      return this.$store.state.baseUrlTMDBImg;
+    },
+  },
   methods: {
     slideLeft() {
       document.getElementById(this.id).scrollLeft -= window.innerWidth - 80;
@@ -53,8 +58,8 @@ export default {
     slideRight() {
       document.getElementById(this.id).scrollLeft += window.innerWidth - 80;
     },
-    handleClick(movie) {
-      this.$router.push({ name: "detail", params: { id: movie.id } });
+    handleMovieClick(movie) {
+      this.$store.dispatch("handleMovieClick", movie);
     },
   },
   created() {
@@ -155,6 +160,9 @@ h2 {
 }
 .row__posters::-webkit-scrollbar {
   display: none;
+}
+.row__posterLarge {
+  max-height: 250px;
 }
 .row__poster {
   object-fit: contain;
