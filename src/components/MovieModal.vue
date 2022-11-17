@@ -106,14 +106,14 @@ export default {
           console.log(res);
           if (res.data.results) {
             this.youtubeId = res.data.results[0]?.key;
-            const output =
-              '<iframe width="100%" height="auto" src=`https://www.youtube.com/embed/${youtubeId}?autoplay=1` frameborder="0"></iframe>';
+            const output = `<iframe width="100%" height="auto" src="https://www.youtube.com/embed/${this.youtubeId}?autoplay=1" frameborder="0"></iframe>`;
+            // 에러의 원인: '<iframe width="100%" height="auto" src=`https://www.youtube.com/embed/${youtubeId}?autoplay=1` frameborder="0"></iframe>';
+
             div.innerHTML = output;
           } else {
             const output = `<h3 class="noVideo">재생할 예고편이 없습니다.</h3>`;
             div.innerHTML = output;
           }
-          // <iframe src="https://www.youtube.com/embed/${youtubeId}?autoplay=1"
         })
         .catch((err) => console.error(err));
     },

@@ -10,16 +10,17 @@
         </div>
       </div>
       <div :id="this.id" class="row__posters">
-        <img
-          v-for="movie in this.movies"
-          :key="movie.id"
-          :class="`row__poster ${isLargeRow && row__posterLarge}`"
-          :src="`${baseUrlTMDBImg}${
-            isLargeRow ? movie.poster_path : movie?.backdrop_path
-          } `"
-          :alt="movie.name"
-          @click="handleMovieClick(movie)"
-        />
+        <div v-for="movie in this.movies" :key="movie.id">
+          <img
+            :class="`row__poster ${isLargeRow && row__posterLarge}`"
+            :src="`${baseUrlTMDBImg}${
+              isLargeRow ? movie.poster_path : movie?.backdrop_path
+            } `"
+            :alt="movie.name"
+            @click="handleMovieClick(movie)"
+          />
+          <span class="row__title">{{ movie.title }}</span>
+        </div>
       </div>
       <div class="slider__arrow-right">
         <span class="arrow" @click="slideRight">
@@ -175,6 +176,14 @@ h2 {
 }
 .row__poster:hover {
   transform: scale(1.08);
+}
+.row__poster:hover + .row__title {
+  opacity: 1;
+}
+.row__title {
+  opacity: 0;
+  position: absolute;
+  transition: all ease-in-out 400ms;
 }
 /* .row__posterLarge {
   max-height: 320px;
