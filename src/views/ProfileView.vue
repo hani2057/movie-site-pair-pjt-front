@@ -2,7 +2,7 @@
   <div>
     <h1>Profile</h1>
     <p>아이디 : {{ user?.email }}</p>
-    <p>{{ user }}</p>
+    <p>{{ username }}</p>
     <!-- <p>제목 : {{ article?.title }}</p>
     <p>내용 : {{ article?.content }}</p>
     <p>작성시간 : {{ article?.created_at }}</p>
@@ -21,6 +21,9 @@ export default {
     return {
       user: null,
     };
+  },
+  props: {
+    username: String,
   },
   created() {
     this.getUserProfile();
