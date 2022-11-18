@@ -56,13 +56,34 @@ export default new Vuex.Store({
           username: payload.username,
           password1: payload.password1,
           password2: payload.password2,
-          nick_name: payload.nickname,
+          nickname: payload.nickname,
           age: payload.age,
         },
       }).then((res) => {
         // console.log(res)
         context.commit("SAVE_TOKEN", res.data.key);
+      }).catch((err)=>{
+        console.log(err)
       });
+    },
+
+    logIn(context, payload) {
+      axios({
+        method: 'post',
+        url: `${context.state.baseUrlLocalServer}/accounts/login/`,
+        data: {
+          username: payload.username,
+          password: payload.password,
+        }
+      })
+        .then((res)=> {
+          console.log(res)
+          alert('로그인성공')
+          context.commit('SAVE_TOKEN', res.data.key)
+        }).catch((err)=>{
+          alert('로그인실패')
+          console.log(err)
+        });
     },
 
     getSingleMovieData(context, movieId) {
