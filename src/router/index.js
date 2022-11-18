@@ -3,7 +3,7 @@ import VueRouter from "vue-router";
 import MainView from "@/views/MainView";
 // import DetailView from "@/views/DetailView";
 import ListView from "@/views/ListView";
-import ProfileView from "@/views/ProfileView";
+// import ProfileView from "@/views/ProfileView";
 // import LogInView from "@/views/LogInView";
 // import SignUpView from "@/views/SignUpView";
 
@@ -35,7 +35,8 @@ const routes = [
   {
     path: "/profile/:username",
     name: "profile",
-    component: ProfileView,
+    component: () => import("@/views/ProfileView"),
+    props: true,
     // children: [
     //   {
     //     path: "userMadeList", <= path 앞에 / 붙이면 루트로 인식됨

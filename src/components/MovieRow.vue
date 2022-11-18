@@ -14,15 +14,14 @@
           v-for="movie in this.movies"
           :key="movie.id"
           :class="[isLargeRow ? 'row__posterLargeDiv' : 'row__posterDiv']"
+          @click="handleMovieClick(movie)"
         >
-          <!-- class="row__posterDiv" -->
           <img
             class="row__poster"
             :src="`${baseUrlTMDBImg}${
               isLargeRow ? movie?.poster_path : movie?.backdrop_path
             } `"
             :alt="movie.name"
-            @click="handleMovieClick(movie)"
           />
           <span class="row__posterTitle">{{ movie.title }}</span>
         </div>
