@@ -3,33 +3,35 @@
     <section className="row">
       <h2>{{ title }}</h2>
       <div class="slider">
-        <div class="slider__arrow-left">
-          <span class="arrow" @click="slideLeft">
+        <div class="slider__arrow-left" @click="slideLeft">
+          <span class="arrow">
             <i class="fa-solid fa-less-than"></i>
           </span>
         </div>
-      </div>
-      <div :id="this.id" class="row__posters">
-        <div
-          v-for="movie in this.movies"
-          :key="movie.id"
-          :class="[isLargeRow ? 'row__posterLargeDiv' : 'row__posterDiv']"
-          @click="handleMovieClick(movie)"
-        >
-          <img
-            class="row__poster"
-            :src="`${baseUrlTMDBImg}${
-              isLargeRow ? movie?.poster_path : movie?.backdrop_path
-            } `"
-            :alt="movie.name"
-          />
-          <span class="row__posterTitle">{{ movie.title }}</span>
+
+        <div :id="this.id" class="row__posters px-4">
+          <div
+            v-for="movie in this.movies"
+            :key="movie.id"
+            :class="[isLargeRow ? 'row__posterLargeDiv' : 'row__posterDiv']"
+            @click="handleMovieClick(movie)"
+          >
+            <img
+              class="row__poster"
+              :src="`${baseUrlTMDBImg}${
+                isLargeRow ? movie?.poster_path : movie?.backdrop_path
+              } `"
+              :alt="movie.name"
+            />
+            <span class="row__posterTitle">{{ movie.title }}</span>
+          </div>
         </div>
-      </div>
-      <div class="slider__arrow-right">
-        <span class="arrow" @click="slideRight">
-          <i class="fa-solid fa-greater-than"></i>
-        </span>
+
+        <div class="slider__arrow-right" @click="slideRight">
+          <span class="arrow">
+            <i class="fa-solid fa-greater-than"></i>
+          </span>
+        </div>
       </div>
     </section>
   </div>
@@ -105,46 +107,45 @@ h2 {
   box-sizing: border-box;
   transition: 400ms all ease-in-out;
   cursor: pointer;
-  width: 80px;
-  z-index: 1000;
-  height: 100%;
+  width: 50px;
+  height: 50px;
+  z-index: 100;
+  border-radius: 50%;
+  background: rgba(20, 20, 20, 0.7);
+  /* height: 100%; */
   display: flex;
   justify-content: center;
   align-items: center;
-  visibility: hidden;
+  /* visibility: hidden; */
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
 }
 .slider__arrow-left {
-  position: absolute;
   left: 0;
-  top: 0;
 }
 .slider__arrow-right {
-  position: absolute;
   right: 0;
-  top: 0;
-}
-.arrow {
-  transition: 400ms all ease-in-out;
 }
 .arrow:hover {
   transition: 400ms all ease-in-out;
   transform: scale(1.5);
 }
-.slider:hover .slider__arrow-left,
+/* .slider:hover .slider__arrow-left,
 .slider:hover .slider__arrow-right {
   transition: 400ms all ease-in-out;
   visibility: visible;
-}
-.slider__arrow-left:hover,
+} */
+/* .slider__arrow-left:hover,
 .slider__arrow-right:hover {
   background: rgba(20, 20, 20, 0.5);
   transition: 400ms all ease-in-out;
-}
+} */
 .row__posters {
   display: flex;
   overflow-y: hidden;
   overflow-x: scroll;
-  padding: 20px 0 20px 20px;
+  /* padding: 20px 0 20px 20px; */
   scroll-behavior: smooth;
 }
 .row__posters::-webkit-scrollbar {
@@ -194,6 +195,7 @@ h2 {
   left: 0;
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 10;
+  cursor: pointer;
 }
 .row__posterDiv:hover > .row__poster,
 .row__posterLargeDiv:hover > .row__poster {
@@ -204,6 +206,7 @@ h2 {
 .row__posterLargeDiv:hover > .row__posterTitle {
   opacity: 1;
   align-self: center;
+  cursor: pointer;
 }
 
 /*
