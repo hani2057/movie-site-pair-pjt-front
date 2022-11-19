@@ -3,29 +3,35 @@
     <section className="row">
       <h2>{{ title }}</h2>
       <div class="slider">
-        <div class="slider__arrow-left">
-          <span class="arrow" @click="slideLeft">
+        <div class="slider__arrow-left" @click="slideLeft">
+          <span class="arrow">
             <i class="fa-solid fa-less-than"></i>
           </span>
         </div>
-      </div>
-      <div :id="this.id" class="row__posters">
-        <div v-for="movie in this.movies" :key="movie.id">
-          <img
-            :class="`row__poster ${isLargeRow && row__posterLarge}`"
-            :src="`${baseUrlTMDBImg}${
-              isLargeRow ? movie.poster_path : movie?.backdrop_path
-            } `"
-            :alt="movie.name"
+
+        <div :id="this.id" class="row__posters px-4">
+          <div
+            v-for="movie in this.movies"
+            :key="movie.id"
+            :class="[isLargeRow ? 'row__posterLargeDiv' : 'row__posterDiv']"
             @click="handleMovieClick(movie)"
-          />
-          <span class="row__title">{{ movie.title }}</span>
+          >
+            <img
+              class="row__poster"
+              :src="`${baseUrlTMDBImg}${
+                isLargeRow ? movie?.poster_path : movie?.backdrop_path
+              } `"
+              :alt="movie.name"
+            />
+            <span class="row__posterTitle">{{ movie.title }}</span>
+          </div>
         </div>
-      </div>
-      <div class="slider__arrow-right">
-        <span class="arrow" @click="slideRight">
-          <i class="fa-solid fa-greater-than"></i>
-        </span>
+
+        <div class="slider__arrow-right" @click="slideRight">
+          <span class="arrow">
+            <i class="fa-solid fa-greater-than"></i>
+          </span>
+        </div>
       </div>
     </section>
   </div>
@@ -94,123 +100,156 @@ h2 {
 .slider {
   position: relative;
 }
-.slider__arrow-left {
+.slider__arrow-left,
+.slider__arrow-right {
   background-clip: content-box;
   padding: 20px 0;
   box-sizing: border-box;
   transition: 400ms all ease-in-out;
   cursor: pointer;
-  width: 80px;
-  z-index: 1000;
-  position: absolute;
-  left: 0;
-  top: 0;
-  height: 100%;
+  width: 50px;
+  height: 50px;
+  z-index: 100;
+  border-radius: 50%;
+  background: rgba(20, 20, 20, 0.7);
+  /* height: 100%; */
   display: flex;
-  align-items: center;
   justify-content: center;
-  visibility: hidden;
+  align-items: center;
+  /* visibility: hidden; */
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.slider__arrow-left {
+  left: 0;
 }
 .slider__arrow-right {
-  padding: 20px 0;
-  background-clip: content-box;
-  box-sizing: border-box;
-  transition: 400ms all ease-in-out;
-  cursor: pointer;
-  width: 80px;
-  z-index: 1000;
-  position: absolute;
   right: 0;
-  top: 0;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  visibility: hidden;
-}
-.arrow {
-  transition: 400ms all ease-in-out;
 }
 .arrow:hover {
   transition: 400ms all ease-in-out;
   transform: scale(1.5);
 }
-.slider:hover .slider__arrow-left {
-  transition: 400ms all ease-in-out;
-  visibility: visible;
-}
+/* .slider:hover .slider__arrow-left,
 .slider:hover .slider__arrow-right {
   transition: 400ms all ease-in-out;
   visibility: visible;
-}
-.slider__arrow-left:hover {
-  background: rgba(20, 20, 20, 0.5);
-  transition: 400ms all ease-in-out;
-}
+} */
+/* .slider__arrow-left:hover,
 .slider__arrow-right:hover {
   background: rgba(20, 20, 20, 0.5);
   transition: 400ms all ease-in-out;
-}
-
+} */
 .row__posters {
   display: flex;
   overflow-y: hidden;
   overflow-x: scroll;
-  padding: 20px 0 20px 20px;
+  /* padding: 20px 0 20px 20px; */
   scroll-behavior: smooth;
 }
 .row__posters::-webkit-scrollbar {
   display: none;
 }
-.row__posterLarge {
-  max-height: 250px;
+.row__posterDiv,
+.row__posterLargeDiv {
+  display: inline-block;
+  position: relative;
+  /* flex-basis: 100%; */
+  flex-shrink: 0;
+  max-width: 250px;
+  max-height: 144px;
+  overflow: hidden !important;
+  margin-right: 25px;
+  border-radius: 6px;
+}
+.row__posterLargeDiv {
+  max-width: 160px;
+  max-height: 300px;
+  margin-right: 30px;
 }
 .row__poster {
   object-fit: contain;
   width: 100%;
-  max-height: 144px;
-  margin-right: 10px;
-  transition: transform 450ms;
-  border-radius: 4px;
-  margin-bottom: 10px;
+  height: 100%;
 }
-.row__poster:hover {
-  transform: scale(1.08);
-}
-.row__poster:hover + .row__title {
-  opacity: 1;
-}
-.row__title {
+.row__posterTitle {
+  position: absolute;
   opacity: 0;
-  position: absolute;
-  transition: all ease-in-out 400ms;
+  top: 50%;
+  left: 50%;
+  z-index: 20;
+  font-weight: 600;
+  text-align: center;
+  /* font-size: 20px; */
+  transform: translate(-50%, -50%);
+  transition: all ease-out 450ms;
 }
-/* .row__posterLarge {
-  max-height: 320px;
-} */
-/* .row__posterLarge:hover {
-  transform: scale(1.1);
+.row__posterDiv:hover:after,
+.row__posterLargeDiv:hover:after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 10;
+  cursor: pointer;
+}
+.row__posterDiv:hover > .row__poster,
+.row__posterLargeDiv:hover > .row__poster {
+  transform: scale(1.2);
+  transition: all ease-in-out 450ms;
+}
+.row__posterDiv:hover > .row__posterTitle,
+.row__posterLargeDiv:hover > .row__posterTitle {
   opacity: 1;
-} */
+  align-self: center;
+  cursor: pointer;
+}
 
-.row__arrow-left {
-  position: absolute;
-  top: 0;
-  left: 20px;
-  height: 100%;
-  width: 32px;
-  background: rgba(0, 0, 0, 0.2);
-  display: flex;
-  align-items: center;
+/*
+@media screen and (min-width: 1200px) {
+  .row__poster {
+    max-height: 160px;
+  }
+  .row__posterLarge {
+    max-height: 360px;
+  }
 }
-.row__arrow-right {
-  position: absolute;
-  top: 0;
-  right: 0px;
-  height: 100%;
-  width: 32px;
-  background: rgba(0, 0, 0, 0.2);
-  display: flex;
-  align-items: center;
+@media screen and (max-width: 768px) {
+  .row__poster {
+    max-height: 100px;
+  }
+  .row__posterLarge {
+    max-height: 280px;
+  }
 }
+
+.swiper-pagination {
+  text-align: right !important;
+}
+
+.swiper-pagination-bullet {
+  background: gray !important;
+  opacity: 1 !important;
+}
+
+.swiper-pagination-bullet-active {
+  background: white !important;
+}
+
+.swiper-button-prev {
+  color: white !important;
+}
+
+.swiper-button-next {
+  color: white !important;
+}
+
+.swiper-button-next:after, .swiper-button-prev:after{
+  font-size: 1.3rem !important;
+  font-weight: 600 !important;
+} */
 </style>

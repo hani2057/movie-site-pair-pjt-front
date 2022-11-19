@@ -14,12 +14,14 @@
               v-for="movie in this.movies"
               :key="movie.id"
             >
-              <img
-                class="row__poster"
-                :src="`https://image.tmdb.org/t/p/original/${movie.backdrop_path} `"
-                :alt="movie.name"
-                @click="handleMovieClick(movie)"
-              />
+              <div class="row__posterDiv mb-3" @click="handleMovieClick(movie)">
+                <img
+                  class="row__poster"
+                  :src="`https://image.tmdb.org/t/p/original/${movie.backdrop_path} `"
+                  :alt="movie.name"
+                />
+                <span class="row__posterTitle">{{ movie.title }}</span>
+              </div>
             </b-col>
           </b-row>
         </b-container>

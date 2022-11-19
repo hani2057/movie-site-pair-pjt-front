@@ -1,16 +1,20 @@
 <template>
   <div id="app">
-    <nav>
-      <router-link :to="{ name: 'main' }">TiCi</router-link> |
-      <router-link to="/list">Movies</router-link> |
-      <router-link to="/login">Log In</router-link> |
-      <!-- <router-link to="/main">Log Out</router-link> | -->
-      <router-link to="/signup">Sign Up</router-link> |
-      <router-link to="/profile">Profile</router-link>
-    </nav>
+    <NavBar />
     <router-view />
   </div>
 </template>
+
+<script>
+import NavBar from "@/components/NavBar";
+
+export default {
+  name: "App",
+  components: {
+    NavBar,
+  },
+};
+</script>
 
 <style>
 #app {

@@ -62,7 +62,28 @@ export default new Vuex.Store({
       }).then((res) => {
         // console.log(res)
         context.commit("SAVE_TOKEN", res.data.key);
+      }).catch((err)=>{
+        console.log(err)
       });
+    },
+
+    logIn(context, payload) {
+      axios({
+        method: 'post',
+        url: `${context.state.baseUrlLocalServer}/accounts/login/`,
+        data: {
+          username: payload.username,
+          password: payload.password,
+        }
+      })
+        .then((res)=> {
+          console.log(res)
+          alert('로그인성공')
+          context.commit('SAVE_TOKEN', res.data.key)
+        }).catch((err)=>{
+          alert('로그인실패')
+          console.log(err)
+        });
     },
 
     getSingleMovieData(context, movieId) {
