@@ -7,6 +7,11 @@ import App from "./App.vue";
 import store from "./store";
 import router from "./router";
 
+//cookie
+import VueCookies from "vue-cookies"
+Vue.use(VueCookies)
+Vue.$cookies.config("1d") //1일뒤에 만료되는 쿠키 설정
+
 Vue.use(BootstrapVue);
 
 Vue.config.productionTip = false;

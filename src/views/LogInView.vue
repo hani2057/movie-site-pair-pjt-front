@@ -9,13 +9,28 @@
       <input type="password" id="password" v-model="password"><br>
 
       <input type="submit" value="logIn">
+
+
+      <a @click="getTest">get cookie</a><br>
+      <a @click="setTest">set cookie</a><br>
+      <a @click="resetTest">reset cookie</a><br>
     </form>
+
+
+
+    <!-- <CookieTest/> -->
   </div>
 </template>
 
 <script>
+import VueCookie from 'vue-cookies'
+// import CookieTest from '@/components/CookieTest.vue'
+
 export default {
   name: 'LogInView',
+  // components:{
+  //   CookieTest,
+  // },
   data() {
     return{
       username: null,
@@ -31,7 +46,22 @@ export default {
         username: username,
         password: password,
       }
+      this.setTest()
       this.$store.dispatch('logIn', payload)
+    },
+    getTest(){
+      if (VueCookie.isKey('id')) { alert(VueCookie.get('id')) } else {
+        alert('값 없음')
+      }
+      console.log(VueCookie)
+    },
+    setTest(){
+      console.log(this.username)
+      VueCookie.set('id', this.username)
+    },
+    resetTest(){
+      alert('삭제됨')
+      VueCookie.remove('id')
     }
   }
 }
