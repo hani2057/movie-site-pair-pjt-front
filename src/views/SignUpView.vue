@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="component-wrapper">
     <h1>Sign Up Page</h1>
     <form @submit.prevent="signUp">
       <label for="username">username : </label>

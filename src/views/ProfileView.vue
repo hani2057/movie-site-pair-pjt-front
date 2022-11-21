@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="component-wrapper">
     <h1>Profile</h1>
     <p>아이디 : {{ user?.email }}</p>
     <p>{{ username }}</p>

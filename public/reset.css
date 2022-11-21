@@ -131,7 +131,7 @@ h5,
 h6,
 p,
 span {
-  color: #dee1e4;
+  color: var(--main-text-color);
 }
 
 /* i {

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="component-wrapper">
     <MovieRow
       title="Movies for you"
       id="MR"
@@ -138,19 +138,19 @@ export default {
 
 <style>
 #tab {
-  background-color: #19191c;
-  color: #dee1e4;
+  background-color: var(--main-bg-color);
+  color: var(--main-text-color);
 }
 #__BVID__341 > div.card-header {
-  background-color: #19191c !important;
+  background-color: var(--main-bg-color) !important;
   border: none !important;
 }
 a,
 a:visited,
 a:hover {
-  color: #dee1e4 !important;
+  color: var(--main-text-color) !important;
 }
 a[aria-selected="true"] {
-  color: #19191c !important;
+  color: var(--main-bg-color) !important;
 }
 </style>

@@ -9,10 +9,6 @@ export default new Vuex.Store({
     // 유저 관련
     token: null,
 
-    // 공통 CONSTANTS
-    BG_COLOR: "#19191c",
-    TEXT_COLOR: "#dee1e4",
-
     // http request 관련
     baseUrlTMDB: "https://api.themoviedb.org/3",
     paramsTMDB: {
@@ -59,30 +55,33 @@ export default new Vuex.Store({
           nickname: payload.nickname,
           age: payload.age,
         },
-      }).then((res) => {
-        // console.log(res)
-        context.commit("SAVE_TOKEN", res.data.key);
-      }).catch((err)=>{
-        console.log(err)
-      });
+      })
+        .then((res) => {
+          // console.log(res)
+          context.commit("SAVE_TOKEN", res.data.key);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
 
     logIn(context, payload) {
       axios({
-        method: 'post',
+        method: "post",
         url: `${context.state.baseUrlLocalServer}/accounts/login/`,
         data: {
           username: payload.username,
           password: payload.password,
-        }
+        },
       })
-        .then((res)=> {
-          console.log(res)
-          alert('로그인성공')
-          context.commit('SAVE_TOKEN', res.data.key)
-        }).catch((err)=>{
-          alert('로그인실패')
-          console.log(err)
+        .then((res) => {
+          console.log(res);
+          alert("로그인성공");
+          context.commit("SAVE_TOKEN", res.data.key);
+        })
+        .catch((err) => {
+          alert("로그인실패");
+          console.log(err);
         });
     },
 
