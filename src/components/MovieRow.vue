@@ -71,8 +71,11 @@ export default {
   },
   created() {
     let baseURL = this.$store.state.baseUrlTMDB;
+    // let params = this.$store.state.paramsTMDB;
+
     if (this.id === "MR") {
       baseURL = this.$store.state.baseUrlLocalServer;
+      // params = "";
     }
 
     axios({
@@ -196,6 +199,7 @@ h2 {
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 10;
   cursor: pointer;
+  overflow: hidden;
 }
 .row__posterDiv:hover > .row__poster,
 .row__posterLargeDiv:hover > .row__poster {
@@ -226,30 +230,5 @@ h2 {
     max-height: 280px;
   }
 }
-
-.swiper-pagination {
-  text-align: right !important;
-}
-
-.swiper-pagination-bullet {
-  background: gray !important;
-  opacity: 1 !important;
-}
-
-.swiper-pagination-bullet-active {
-  background: white !important;
-}
-
-.swiper-button-prev {
-  color: white !important;
-}
-
-.swiper-button-next {
-  color: white !important;
-}
-
-.swiper-button-next:after, .swiper-button-prev:after{
-  font-size: 1.3rem !important;
-  font-weight: 600 !important;
-} */
+ */
 </style>

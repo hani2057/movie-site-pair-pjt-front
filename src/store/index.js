@@ -1,11 +1,14 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import axios from "axios";
+import createPersistedState from "vuex-persistedstate";
+
 import router from "@/router/index";
 
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
+  plugins: [createPersistedState()],
   state: {
     // 유저 관련
     token: null,
@@ -107,7 +110,7 @@ const store = new Vuex.Store({
         method: "post",
         url: `${context.state.baseUrlLocalServer}/accounts/logout/`,
         headers: {
-          Authorization: `Token ${this.$store.state.token}`,
+          Authorization: `Token ${context.state.token}`,
         },
       })
         .then((res) => {

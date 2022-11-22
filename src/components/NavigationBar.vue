@@ -34,7 +34,7 @@
             마이페이지</b-dropdown-item
           >
           <b-dropdown-item>설정</b-dropdown-item>
-          <b-dropdown-devider></b-dropdown-devider>
+          <!-- <b-dropdown-devider></b-dropdown-devider> -->
           <b-dropdown-item @click="logOut">로그아웃</b-dropdown-item>
         </b-nav-item-dropdown>
       </div>

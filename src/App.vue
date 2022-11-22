@@ -27,6 +27,10 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   background-color: var(--main-bg-color);
   color: var(--main-text-color);
+  overflow: hidden !important;
+}
+#app::-webkit-scrollbar {
+  display: none;
 }
 
 /* nav {
