@@ -1,5 +1,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
+import store from "@/store/index";
+
 import MainView from "@/views/MainView";
 // import ProfileView from "@/views/ProfileView";
 // import LogInView from "@/views/LogInView";
@@ -35,6 +37,15 @@ const routes = [
     path: "/login",
     name: "login",
     component: () => import("@/views/LogInView"),
+    beforeEnter(to, from, next) {
+      const isLoggedIn = store.getters.isLoggedIn;
+
+      if (isLoggedIn) {
+        next({ name: "main" });
+      } else {
+        next();
+      }
+    },
   },
   {
     path: "/signup",
@@ -48,5 +59,17 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes,
 });
+
+// router.beforeEach((to, from, next) => {
+//   const isLoggedIn = this.$store.state.isLoggedIn;
+//   const authRequiredPages = [];
+//   const isAuthRequired = authPages.includes(to.name);
+
+//   if (isAuthRequired && !isLoggedIn) {
+//     next({ name: "login" });
+//   } else {
+//     next();
+//   }
+// });
 
 export default router;

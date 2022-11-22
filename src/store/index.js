@@ -1,10 +1,11 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import axios from "axios";
+import router from "@/router/index";
 
 Vue.use(Vuex);
 
-export default new Vuex.Store({
+const store = new Vuex.Store({
   state: {
     // 유저 관련
     token: null,
@@ -27,6 +28,9 @@ export default new Vuex.Store({
     singleMovieData: {},
   },
   getters: {
+    isLoggedIn(state) {
+      return !!state.token;
+    },
     // isModalOpened(state) {
     //   return state.isModalOpened;
     // },
@@ -34,12 +38,14 @@ export default new Vuex.Store({
   mutations: {
     SAVE_TOKEN(state, token) {
       state.token = token;
-      router.push({ name: "main" });
     },
     DELETE_TOKEN(state) {
       state.token = null;
       router.push({ name: "main" });
     },
+    // CHANGE_LOG_IN_STATE(state) {
+    //   state.isLoggedIn = !state.isLoggedIn;
+    // },
     CHANGE_MODAL_OPEN_STATE(state) {
       state.isModalOpened = !state.isModalOpened;
     },
@@ -65,6 +71,7 @@ export default new Vuex.Store({
         .then((res) => {
           // console.log(res)
           context.commit("SAVE_TOKEN", res.data.key);
+          router.push({ name: "login" });
         })
         .catch((err) => {
           console.log(err);
@@ -86,6 +93,8 @@ export default new Vuex.Store({
           console.log(res);
           alert("로그인성공");
           context.commit("SAVE_TOKEN", res.data.key);
+          // context.commit("CHANGE_LOG_IN_STATE");
+          router.push({ name: "main" });
         })
         .catch((err) => {
           alert("로그인실패");
@@ -105,6 +114,7 @@ export default new Vuex.Store({
           console.log(res);
           alert("로그아웃성공");
           context.commit("DELETE_TOKEN");
+          // context.commit("CHANGE_LOG_IN_STATE");
         })
         .catch((err) => {
           alert("로그아웃실패");
@@ -131,3 +141,5 @@ export default new Vuex.Store({
   },
   modules: {},
 });
+
+export default store;

@@ -35,7 +35,7 @@
           >
           <b-dropdown-item>설정</b-dropdown-item>
           <b-dropdown-devider></b-dropdown-devider>
-          <b-dropdown-item>로그아웃</b-dropdown-item>
+          <b-dropdown-item @click="logOut">로그아웃</b-dropdown-item>
         </b-nav-item-dropdown>
       </div>
     </b-nav>
@@ -71,9 +71,20 @@ export default {
   data() {
     return {
       username: "hani",
-      // isLoggedIn: true,
-      isLoggedIn: false,
     };
+  },
+  computed: {
+    isLoggedIn() {
+      return this.$store.getters.isLoggedIn;
+    },
+  },
+  watch: {
+    isLoggedIn() {},
+  },
+  methods: {
+    logOut() {
+      this.$store.dispatch("logOut");
+    },
   },
 };
 </script>
