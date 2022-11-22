@@ -34,7 +34,11 @@ export default new Vuex.Store({
   mutations: {
     SAVE_TOKEN(state, token) {
       state.token = token;
-      // router.push({ name: "ArticleView" });
+      router.push({ name: "main" });
+    },
+    DELETE_TOKEN(state) {
+      state.token = null;
+      router.push({ name: "main" });
     },
     CHANGE_MODAL_OPEN_STATE(state) {
       state.isModalOpened = !state.isModalOpened;
@@ -45,15 +49,17 @@ export default new Vuex.Store({
   },
   actions: {
     signUp(context, payload) {
+      const { username, password1, password2, nickname, age } = payload;
+
       axios({
         method: "post",
         url: `${context.state.baseUrlLocalServer}/accounts/signup/`,
         data: {
-          username: payload.username,
-          password1: payload.password1,
-          password2: payload.password2,
-          nickname: payload.nickname,
-          age: payload.age,
+          username,
+          password1,
+          password2,
+          nickname,
+          age,
         },
       })
         .then((res) => {
@@ -66,12 +72,14 @@ export default new Vuex.Store({
     },
 
     logIn(context, payload) {
+      const { username, password } = payload;
+
       axios({
         method: "post",
         url: `${context.state.baseUrlLocalServer}/accounts/login/`,
         data: {
-          username: payload.username,
-          password: payload.password,
+          username,
+          password,
         },
       })
         .then((res) => {
@@ -81,6 +89,25 @@ export default new Vuex.Store({
         })
         .catch((err) => {
           alert("로그인실패");
+          console.error(err);
+        });
+    },
+
+    logOut(context) {
+      axios({
+        method: "post",
+        url: `${context.state.baseUrlLocalServer}/accounts/logout/`,
+        headers: {
+          Authorization: `Token ${this.$store.state.token}`,
+        },
+      })
+        .then((res) => {
+          console.log(res);
+          alert("로그아웃성공");
+          context.commit("DELETE_TOKEN");
+        })
+        .catch((err) => {
+          alert("로그아웃실패");
           console.log(err);
         });
     },
