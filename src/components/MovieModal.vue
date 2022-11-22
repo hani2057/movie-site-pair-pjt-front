@@ -50,10 +50,12 @@
                 </div>
               </div>
             </div>
+
             <div>
               <p class="modal-card__info-overview">
                 {{ singleMovieData.overview }}
               </p>
+
               <p v-if="!singleMovieData.overview">
                 이 영화는 상세정보를 제공하지 않습니다.
               </p>
@@ -78,6 +80,7 @@
                 <span> {{ review?.content }}</span>
               </div>
             </div>
+            <div class="modal-card__info-reviews">{{ singleMovieReviews }}</div>
           </div>
           <div class="modal-card__space" v-show="trailerExists">
             <iframe
@@ -87,6 +90,7 @@
               frameborder="0"
               class="modal-card__space-trailer"
             ></iframe>
+
             <p v-if="!trailerExists">재생할 예고편이 없습니다.</p>
           </div>
         </div>
@@ -174,6 +178,7 @@ export default {
     getMovieReviews() {
       console.log(this.singleMovieData);
       const movieId = this.singleMovieData.id || this.singleMovieData.movie_id;
+
       this.$store.dispatch("getSingleMovieReviews", movieId);
 
       // console.log(singleMovieId);
@@ -221,6 +226,9 @@ export default {
   beforeRouteUpdate() {
     this.getMovieReviews();
   },
+  // beforeRouteUpdate() {
+  //   this.getMovieReviews();
+  // },
   created() {
     this.getMovieReviews();
   },
@@ -242,7 +250,9 @@ export default {
 }
 .modal-card {
   position: relative;
+
   max-width: 60%;
+
   min-width: 1100px;
   margin: auto;
   margin-top: 50px;
@@ -274,7 +284,9 @@ export default {
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   word-wrap: break-word;
+
   /* white-space: nowrap; */
+
   text-overflow: ellipsis;
   height: 6em;
   overflow: hidden;

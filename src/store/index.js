@@ -30,6 +30,7 @@ const store = new Vuex.Store({
     isModalOpened: false,
     singleMovieData: {},
     singleMovieReviews: [],
+
     movieGenres: {
       12: "모험",
       14: "판타지",
@@ -96,6 +97,7 @@ const store = new Vuex.Store({
     SET_SINGLE_MOVIE_REVIEWS(state, singleMovieReviews) {
       state.singleMovieReviews = singleMovieReviews;
     },
+
     DELETE_SINGLE_MOVIE_REVIEWS(state) {
       state.singleMovieReviews = [];
     },
@@ -175,6 +177,7 @@ const store = new Vuex.Store({
       context.commit("CHANGE_MODAL_OPEN_STATE");
       context.commit("SET_SINGLE_MOVIE_DATA", singleMovieData);
     },
+
     // getSingleMovieData(context, movieId) {
     //   axios({
     //     method: "get",
@@ -197,6 +200,7 @@ const store = new Vuex.Store({
     //     })
     //     .catch((err) => console.error(err));
     // },
+
     getSingleMovieData(context, movieId) {
       axios({
         method: "get",
@@ -211,6 +215,7 @@ const store = new Vuex.Store({
     },
     getSingleMovieReviews(context, movieId) {
       // context.state.singleMovieReviews = [];
+
       axios({
         method: "get",
         url: `${context.state.baseUrlLocalServer}/movies/detail/${movieId}/comment/`,
