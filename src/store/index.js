@@ -30,7 +30,6 @@ const store = new Vuex.Store({
     isModalOpened: false,
     singleMovieData: {},
     singleMovieReviews: [],
-    // // 영화 장르
     movieGenres: {
       12: "모험",
       14: "판타지",
@@ -96,6 +95,9 @@ const store = new Vuex.Store({
     },
     SET_SINGLE_MOVIE_REVIEWS(state, singleMovieReviews) {
       state.singleMovieReviews = singleMovieReviews;
+    },
+    DELETE_SINGLE_MOVIE_REVIEWS(state) {
+      state.singleMovieReviews = [];
     },
   },
   actions: {
@@ -173,6 +175,28 @@ const store = new Vuex.Store({
       context.commit("CHANGE_MODAL_OPEN_STATE");
       context.commit("SET_SINGLE_MOVIE_DATA", singleMovieData);
     },
+    // getSingleMovieData(context, movieId) {
+    //   axios({
+    //     method: "get",
+    //     url: `${context.state.baseUrlTMDB}/movie/${movieId}`,
+    //     params: context.state.paramsTMDB,
+    //   })
+    //     .then((res) => {
+    //       context.commit("SET_SINGLE_MOVIE_DATA", res.data);
+    //       console.log(res);
+    //     })
+    //     .then((res) => {
+    //       const movieId = res.id || res.movie_id;
+    //       axios({
+    //         method: "get",
+    //         url: `${context.state.baseUrlLocalServer}/movies/detail/${movieId}/comment/`,
+    //       }).then((res) => {
+    //         console.log("리뷰", res);
+    //         context.commit("SET_SINGLE_MOVIE_REVIEWS", res.data);
+    //       });
+    //     })
+    //     .catch((err) => console.error(err));
+    // },
     getSingleMovieData(context, movieId) {
       axios({
         method: "get",
@@ -186,6 +210,7 @@ const store = new Vuex.Store({
         .catch((err) => console.error(err));
     },
     getSingleMovieReviews(context, movieId) {
+      // context.state.singleMovieReviews = [];
       axios({
         method: "get",
         url: `${context.state.baseUrlLocalServer}/movies/detail/${movieId}/comment/`,

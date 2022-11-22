@@ -72,7 +72,12 @@
                 <button type="submit">등록</button>
               </form>
             </div>
-            <div class="modal-card__info-reviews">{{ singleMovieReviews }}</div>
+            <div class="modal-card__info-reviews">
+              <div v-for="review in singleMovieReviews" :key="review.id">
+                <span> {{ review?.score }}</span>
+                <span> {{ review?.content }}</span>
+              </div>
+            </div>
           </div>
           <div class="modal-card__space" v-show="trailerExists">
             <iframe
@@ -124,18 +129,18 @@ export default {
     singleMovieReviews() {
       return this.$store.state.singleMovieReviews;
     },
-    genres(genre_id) {
-      return this.$store.state.movieGenres.get[genre_id];
-    },
   },
   watch: {
     singleMovieData() {},
-    singleMovieReviews() {},
+    singleMovieReviews(val) {
+      console.log("review watch", val);
+    },
   },
   methods: {
     closeModal() {
       this.trailerExists = false;
       this.$store.commit("CHANGE_MODAL_OPEN_STATE");
+      this.$store.commit("DELETE_SINGLE_MOVIE_REVIEWS");
     },
     showTrailer() {
       console.log(this.singleMovieData);
@@ -213,9 +218,9 @@ export default {
       // this.getMovieReviews();
     },
   },
-  // beforeRouteUpdate() {
-  //   this.getMovieReviews();
-  // },
+  beforeRouteUpdate() {
+    this.getMovieReviews();
+  },
   created() {
     this.getMovieReviews();
   },
