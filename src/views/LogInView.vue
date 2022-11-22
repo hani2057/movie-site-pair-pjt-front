@@ -24,6 +24,8 @@
           />
           <button type="submit" id="login-btn">LOG IN</button>
         </form>
+        <p>회원가입하러 가기</p>
+        <button type="text" id="login-to-signup-btn">SIGN UP</button>
 
         <!-- <CookieTest/> -->
         <!-- <a @click="getTest">get cookie</a><br />

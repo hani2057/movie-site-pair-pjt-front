@@ -29,10 +29,49 @@ const store = new Vuex.Store({
     // single movie detail modal 관련
     isModalOpened: false,
     singleMovieData: {},
+    singleMovieReviews: [],
+    // // 영화 장르
+    movieGenres: {
+      12: "모험",
+      14: "판타지",
+      16: "애니메이션",
+      18: "드라마",
+      27: "공포",
+      28: "액션",
+      35: "코미디",
+      36: "역사",
+      37: "서부",
+      53: "스릴러",
+      80: "범죄",
+      99: "다큐멘터리",
+      878: "SF",
+      9648: "미스터리",
+      10402: "음악",
+      10749: "로맨스",
+      10751: "가족",
+      10752: "전쟁",
+      10770: "TV 영화",
+    },
   },
   getters: {
     isLoggedIn(state) {
       return !!state.token;
+    },
+    singleMovieDataGenres(state) {
+      // console.log(state.singleMovieData);
+      const singleMovieDataGenres = [];
+      if (state.singleMovieData.genres) {
+        for (const genreObject of state.singleMovieData.genres) {
+          singleMovieDataGenres.push(genreObject.name);
+        }
+        return singleMovieDataGenres;
+      }
+
+      for (const genre_id of state.singleMovieData.genre_ids) {
+        singleMovieDataGenres.push(state.movieGenres[genre_id]);
+      }
+
+      return singleMovieDataGenres;
     },
     // isModalOpened(state) {
     //   return state.isModalOpened;
@@ -54,6 +93,9 @@ const store = new Vuex.Store({
     },
     SET_SINGLE_MOVIE_DATA(state, singleMovieData) {
       state.singleMovieData = singleMovieData;
+    },
+    SET_SINGLE_MOVIE_REVIEWS(state, singleMovieReviews) {
+      state.singleMovieReviews = singleMovieReviews;
     },
   },
   actions: {
@@ -125,6 +167,12 @@ const store = new Vuex.Store({
         });
     },
 
+    // Movie Modal 관련
+    handleMovieClick(context, singleMovieData) {
+      context.dispatch("getSingleMovieReviews", singleMovieData.id);
+      context.commit("CHANGE_MODAL_OPEN_STATE");
+      context.commit("SET_SINGLE_MOVIE_DATA", singleMovieData);
+    },
     getSingleMovieData(context, movieId) {
       axios({
         method: "get",
@@ -137,9 +185,32 @@ const store = new Vuex.Store({
         })
         .catch((err) => console.error(err));
     },
-    handleMovieClick(context, singleMovieData) {
-      context.commit("CHANGE_MODAL_OPEN_STATE");
-      context.commit("SET_SINGLE_MOVIE_DATA", singleMovieData);
+    getSingleMovieReviews(context, movieId) {
+      axios({
+        method: "get",
+        url: `${context.state.baseUrlLocalServer}/movies/detail/${movieId}/comment/`,
+      })
+        .then((res) => {
+          console.log("리뷰", res);
+          context.commit("SET_SINGLE_MOVIE_REVIEWS", res.data);
+        })
+        .catch((err) => console.error(err));
+    },
+    postSingleMovieReview(context, payload) {
+      const { content, score, movieId } = payload;
+      axios({
+        method: "post",
+        url: `${context.state.baseUrlLocalServer}/movies/detail/${movieId}/comment/`,
+        data: { content, score },
+        headers: {
+          Authorization: `Token ${context.state.token}`,
+        },
+      })
+        .then(() => {
+          // console.log(res);
+          context.dispatch("getSingleMovieReviews", movieId);
+        })
+        .catch((err) => console.error(err));
     },
   },
   modules: {},

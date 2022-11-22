@@ -11,7 +11,7 @@
         <div class="modal-card-wrapper d-flex">
           <div class="modal-card__info d-flex flex-column">
             <div class="modal-card__info-first d-flex">
-              <span v-if="adult">Adult</span>
+              <span v-if="singleMovieData.adult">Adult</span>
               <img
                 class="modal__poster-img me-3"
                 :src="`${baseUrlTMDBImg}${singleMovieData?.poster_path}`"
@@ -23,38 +23,66 @@
                 </h4>
                 <div class="d-flex justify-content-between">
                   <div>
-                    <!-- <i class="vote-star fa-solid fa-star-shooting"></i> -->
-                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star me-1"></i>
                     <span>{{ singleMovieData.vote_average }}</span> <br />
-                    <span>{{ singleMovieData.release_date }} 개봉</span> <br />
+                    <span v-if="singleMovieData.release_date">
+                      {{ singleMovieData.release_date }} 개봉
+                    </span>
+                    <p v-if="!singleMovieData.release_date">
+                      개봉일 정보가 없습니다.
+                    </p>
+                    <br />
+
                     <span
-                      v-for="genre_id in singleMovieData.genre_ids"
-                      :key="genre_id"
+                      v-for="genre in singleMovieDataGenres"
+                      :key="genre"
                       class="badge text-bg-light me-2"
                     >
-                      {{ genre_id }}
+                      {{ genre }}
                     </span>
-                    <!-- </div> -->
                   </div>
-                  <button class="btn btn-outline-light" @click="showTrailer">
+                  <button
+                    class="btn btn-outline-light trailerBtn"
+                    @click="showTrailer"
+                  >
                     예고편 보기
                   </button>
                 </div>
               </div>
             </div>
-            <div class="modal-card__info-second">
-              <p>{{ singleMovieData.overview }}</p>
+            <div>
+              <p class="modal-card__info-overview">
+                {{ singleMovieData.overview }}
+              </p>
+              <p v-if="!singleMovieData.overview">
+                이 영화는 상세정보를 제공하지 않습니다.
+              </p>
             </div>
+            <div class="modal-card__info-review-post">
+              <form @submit.prevent="postReview">
+                <label for="">리뷰 작성</label>
+                <input type="text" v-model="reviewContent" />
+                <input
+                  type="number"
+                  min="0"
+                  max="5"
+                  step="0.5"
+                  v-model="reviewScore"
+                />
+                <button type="submit">등록</button>
+              </form>
+            </div>
+            <div class="modal-card__info-reviews">{{ singleMovieReviews }}</div>
           </div>
-          <div class="modal-card__space">
-            <!-- <iframe
+          <div class="modal-card__space" v-show="trailerExists">
+            <iframe
+              id="singleMovieTrailer"
               width="100%"
-              height="auto"
-              :src="`https://www.youtube.com/embed/${youtubeId}?autoplay=1`"
+              height="350vh"
               frameborder="0"
               class="modal-card__space-trailer"
-            ></iframe> -->
-            <!-- width="640" height="360" -->
+            ></iframe>
+            <p v-if="!trailerExists">재생할 예고편이 없습니다.</p>
           </div>
         </div>
       </div>
@@ -67,59 +95,129 @@ import axios from "axios";
 
 export default {
   name: "MovieModal",
-  // props: {
-  //   title: String,
-  //   poster_path: String,
-  //   backdrop_path: String,
-  //   overview: String,
-  //   vote_average: Number,
-  //   release_date: String,
-  //   adult: Boolean,
-  // },
   data() {
     return {
       bgImgLinearGradient:
         "linear-gradient(to right, rgba(0, 0, 0, 1), 72%, rgba(0, 0, 0, 0))",
+      trailerExists: false,
       youtubeId: "",
+      iframeSrc: `https://www.youtube.com/embed/${this.youtubeId}?autoplay=1`,
+      reviews: [],
+      reviewContent: null,
+      reviewScore: null,
     };
   },
   computed: {
     singleMovieData() {
       return this.$store.state.singleMovieData;
     },
+    singleMovieDataGenres() {
+      return this.$store.getters.singleMovieDataGenres;
+    },
     baseUrlTMDBImg() {
       return this.$store.state.baseUrlTMDBImg;
     },
+    reviewUrlForGetPost() {
+      return `${this.$store.state.baseUrlLocalServer}/movies/detail/${this.singleMovieData.id}/comment/`;
+    },
+    // reviewUrlForUpdateDelete: `${this.$store.state.baseUrlLocalServer}/movies/detail/${this.singleMovieData.id}/comment/`
+    singleMovieReviews() {
+      return this.$store.state.singleMovieReviews;
+    },
+    genres(genre_id) {
+      return this.$store.state.movieGenres.get[genre_id];
+    },
+  },
+  watch: {
+    singleMovieData() {},
+    singleMovieReviews() {},
   },
   methods: {
     closeModal() {
+      this.trailerExists = false;
       this.$store.commit("CHANGE_MODAL_OPEN_STATE");
     },
     showTrailer() {
+      console.log(this.singleMovieData);
       axios({
         method: "get",
-        url: `${this.$store.state.baseUrlTMDB}/movie/${this.singleMovieData.id}/videos`,
+        url: `${this.$store.state.baseUrlTMDB}/movie/${
+          this.singleMovieData.id || this.singleMovieData.movie_id
+        }/videos`,
         params: this.$store.state.paramsTMDBVideo,
       })
         .then((res) => {
-          const div = document.querySelector("div.modal-card__space");
-          console.log(res);
           if (res.data.results) {
+            this.trailerExists = true;
             this.youtubeId = res.data.results[0]?.key;
-            const output = `<iframe width="100%" height="auto" src="https://www.youtube.com/embed/${this.youtubeId}?autoplay=1" frameborder="0" class="modal-trailer" ></iframe>`;
-            // 에러의 원인: '<iframe width="100%" height="auto" src=`https://www.youtube.com/embed/${youtubeId}?autoplay=1` frameborder="0"></iframe>';
 
-            div.innerHTML = output;
-          } else {
-            const output = `<h3 class="noVideo">재생할 예고편이 없습니다.</h3>`;
-            div.innerHTML = output;
+            const singleMovieTrailer =
+              document.getElementById("singleMovieTrailer");
+            console.log(singleMovieTrailer);
+            // const iframeHeight =
+            //   singleMovieTrailer.contentWindow.document.body.scrollHeight;
+
+            // singleMovieTrailer.height = iframeHeight;
+            singleMovieTrailer.setAttribute(
+              "src",
+              `https://www.youtube.com/embed/${this.youtubeId}?autoplay=1`
+            );
           }
         })
         .catch((err) => console.error(err));
     },
+    getMovieReviews() {
+      console.log(this.singleMovieData);
+      const movieId = this.singleMovieData.id || this.singleMovieData.movie_id;
+      this.$store.dispatch("getSingleMovieReviews", movieId);
+
+      // console.log(singleMovieId);
+      // axios({
+      //   method: "get",
+      //   // url: this.reviewUrlForGetPost,
+      //   // url: `${this.$store.state.baseUrlLocalServer}/movies/detail/${singleMovieId}/comment/`,
+      //   url: "http://127.0.0.1:8000/movies/detail/16/comment/",
+      // })
+      //   .then((res) => {
+      //     console.log("리뷰", res);
+      //     this.reviews = res.data;
+      //   })
+      //   .catch((err) => console.error(err));
+    },
+    postReview() {
+      const content = this.reviewContent;
+      const score = this.reviewScore;
+      const movieId = this.singleMovieData.id;
+      // console.log(singleMovieId);
+      // console.log(this.$store.state.token);
+      const payload = { content, score, movieId };
+
+      this.$store.dispatch("postSingleMovieReview", payload);
+
+      this.reviewContent = null;
+      this.reviewScore = null;
+      // axios({
+      //   method: "post",
+      //   url: this.reviewUrlForGetPost,
+      //   // url: `${this.$store.state.baseUrlLocalServer}/movies/detail/${singleMovieId}/comment/`,
+      //   data: { content: reviewContent, score: reviewScore },
+      //   headers: {
+      //     Authorization: `Token ${this.$store.state.token}`,
+      //   },
+      // })
+      //   .then((res) => {
+      //     console.log(res);
+      //   })
+      //   .catch((err) => console.error(err));
+
+      // this.getMovieReviews();
+    },
   },
+  // beforeRouteUpdate() {
+  //   this.getMovieReviews();
+  // },
   created() {
-    console.log(this.singleMovieData);
+    this.getMovieReviews();
   },
 };
 </script>
@@ -139,7 +237,8 @@ export default {
 }
 .modal-card {
   position: relative;
-  max-width: 70%;
+  max-width: 60%;
+  min-width: 1100px;
   margin: auto;
   margin-top: 50px;
   padding: 20px;
@@ -147,6 +246,7 @@ export default {
   background-position: center;
   object-fit: cover;
   min-height: 500px;
+  /* max-height: 50vh; */
   z-index: 40;
   transition: all 400ms ease-in-out 2s;
   animation: fadeIn 400ms;
@@ -156,11 +256,23 @@ export default {
   height: 100%;
 }
 .modal-card__info {
-  max-width: 50%;
+  width: 50%;
 }
 .modal-card__info-first,
-.modal-card__info-second {
+.modal-card__info-overview {
   width: 100%;
+  height: 100%;
+  line-height: 160%;
+}
+.modal-card__info-overview {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  word-wrap: break-word;
+  /* white-space: nowrap; */
+  text-overflow: ellipsis;
+  height: 6em;
+  overflow: hidden;
 }
 .modal__poster-img {
   width: 150px;
@@ -171,10 +283,20 @@ export default {
   height: 30px;
   color: yellow;
 }
+.trailerBtn {
+  height: 75px;
+}
 .modal-card__space {
-  width: 100%;
+  padding-left: 20px;
+  width: 50%;
   height: 100%;
 }
+/* .modal-card__space-trailer {
+  width: 100%;
+  height: 50%;
+  overflow: hidden;
+} */
+
 /* .presentation {
   z-index: 1200;
   position: absolute;

@@ -3,6 +3,7 @@ import VueRouter from "vue-router";
 import store from "@/store/index";
 
 import MainView from "@/views/MainView";
+import MovieModal from "@/components/MovieModal";
 // import ProfileView from "@/views/ProfileView";
 // import LogInView from "@/views/LogInView";
 // import SignUpView from "@/views/SignUpView";
@@ -14,12 +15,13 @@ const routes = [
     path: "/",
     name: "main",
     component: MainView,
-    // children: [
-    //   {
-    //     path: 'action',
-    //     component:
-    //   }
-    // ]
+    children: [
+      {
+        path: ":movieTitle",
+        name: "movieTitle",
+        component: MovieModal,
+      },
+    ],
   },
   {
     path: "/profile/:username",
