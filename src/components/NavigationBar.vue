@@ -28,12 +28,21 @@
             <img src="@/statics/smile.png" style="width: 40px; height: 40px" />
           </template>
 
-          <b-dropdown-item :to="{ name: 'profile' }">
+          <!-- <b-dropdown-item
+            :to="{ name: 'profile', params: { username: username } }"
+          > -->
+          <b-dropdown-item
+            :to="{ name: 'userProfile', params: { username: username } }"
+          >
             <!-- exact
             exact-active-class="active" -->
-            마이페이지</b-dropdown-item
+            마이페이지
+          </b-dropdown-item>
+          <b-dropdown-item
+            :to="{ name: 'profileConfig', params: { username: username } }"
           >
-          <b-dropdown-item>설정</b-dropdown-item>
+            설정
+          </b-dropdown-item>
           <!-- <b-dropdown-devider></b-dropdown-devider> -->
           <b-dropdown-item @click="logOut">로그아웃</b-dropdown-item>
         </b-nav-item-dropdown>
@@ -66,16 +75,16 @@
 </template>
 
 <script>
+import VueCookie from "vue-cookies";
+
 export default {
   name: "NavigationBar",
-  data() {
-    return {
-      username: "hani",
-    };
-  },
   computed: {
     isLoggedIn() {
       return this.$store.getters.isLoggedIn;
+    },
+    username() {
+      return VueCookie.get("id");
     },
   },
   watch: {
