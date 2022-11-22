@@ -28,13 +28,28 @@ const routes = [
     name: "profile",
     component: () => import("@/views/ProfileView"),
     props: true,
-    // children: [
-    //   {
-    //     path: "userMadeList", <= path 앞에 / 붙이면 루트로 인식됨
-    //     component: UserMadeList,
-    //   },
-    // ],
+    children: [
+      {
+        path: "",
+        name: "userProfile",
+        component: () => import("@/components/UserProfile"),
+      },
+      {
+        path: "config",
+        name: "profileConfig",
+        component: () => import("@/views/ProfileConfigView"),
+      },
+      // {
+      //   path: "userMadeList", <= path 앞에 / 붙이면 루트로 인식됨
+      //   component: UserMadeList,
+      // },
+    ],
   },
+  // {
+  //   path: "/profile/:username/config",
+  //   name: "profileConfig",
+  //   component: () => import("@/views/ProfileConfigView"),
+  // },
   {
     path: "/login",
     name: "login",

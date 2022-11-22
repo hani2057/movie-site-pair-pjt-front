@@ -2,6 +2,7 @@ import Vue from "vue";
 import Vuex from "vuex";
 import axios from "axios";
 import createPersistedState from "vuex-persistedstate";
+import VueCookie from "vue-cookies";
 
 import router from "@/router/index";
 
@@ -12,6 +13,7 @@ const store = new Vuex.Store({
   state: {
     // 유저 관련
     token: null,
+    username: null,
 
     // http request 관련
     baseUrlTMDB: "https://api.themoviedb.org/3",
@@ -148,6 +150,33 @@ const store = new Vuex.Store({
           console.error(err);
         });
     },
+    getTest() {
+      if (VueCookie.isKey("id")) {
+        alert(VueCookie.get("id"));
+        console.log("getTest", VueCookie.get("id"));
+        // console.log(VueCookie.get("id"));
+        // console.log(String(VueCookie.get("id")));
+        // console.log(VueCookie.get("id").json());
+        // const username = VueCookie.get("id");
+        // console.log(username);
+        // console.log(typeof username);
+        // return username;
+        // return VueCookie.get("id");
+      } else {
+        alert("값 없음");
+      }
+      console.log(VueCookie);
+    },
+    setTest(context, username) {
+      // console.log(this.username);
+      console.log(context);
+      console.log("setTest", username);
+      VueCookie.set("id", username);
+    },
+    resetTest() {
+      alert("삭제됨");
+      VueCookie.remove("id");
+    },
 
     logOut(context) {
       axios({
@@ -160,6 +189,7 @@ const store = new Vuex.Store({
         .then((res) => {
           console.log(res);
           alert("로그아웃성공");
+          context.dispatch("resetTest");
           context.commit("DELETE_TOKEN");
           // context.commit("CHANGE_LOG_IN_STATE");
         })

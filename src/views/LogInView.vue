@@ -60,25 +60,27 @@ export default {
         username,
         password,
       };
-      this.setTest();
+      VueCookie.set("id", username);
       this.$store.dispatch("logIn", payload);
+      // this.setTest();
+      // this.$store.dispatch("setTest", username);
     },
-    getTest() {
-      if (VueCookie.isKey("id")) {
-        alert(VueCookie.get("id"));
-      } else {
-        alert("값 없음");
-      }
-      console.log(VueCookie);
-    },
-    setTest() {
-      console.log(this.username);
-      VueCookie.set("id", this.username);
-    },
-    resetTest() {
-      alert("삭제됨");
-      VueCookie.remove("id");
-    },
+    // getTest() {
+    //   if (VueCookie.isKey("id")) {
+    //     alert(VueCookie.get("id"));
+    //   } else {
+    //     alert("값 없음");
+    //   }
+    //   console.log(VueCookie);
+    // },
+    // setTest() {
+    //   console.log(this.username);
+    //   VueCookie.set("id", this.username);
+    // },
+    // resetTest() {
+    //   alert("삭제됨");
+    //   VueCookie.remove("id");
+    // },
   },
 };
 </script>
