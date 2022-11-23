@@ -89,20 +89,11 @@ export default {
   },
   watch: {
     isLoggedIn() {},
+    username() {},
   },
   methods: {
     logOut() {
       this.$store.dispatch("logOut");
-    },
-  },
-  computed: {
-    isLoggedIn() {
-      return this.$store.state.isLoggedIn;
-    },
-  },
-  watch: {
-    isLoggedIn(val) {
-      console.log(val);
     },
   },
 };

@@ -75,7 +75,6 @@
                 <span> {{ review?.content }}</span>
               </div>
             </div>
-            <div class="modal-card__info-reviews">{{ singleMovieReviews }}</div>
           </div>
           <div class="modal-card__space" v-show="trailerExists">
             <iframe

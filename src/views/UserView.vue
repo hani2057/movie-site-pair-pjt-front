@@ -14,7 +14,7 @@
 // import axios from "axios";
 
 export default {
-  name: "ProfileView",
+  name: "UserView",
   // data() {
   //   return {
   //     user: null,

@@ -24,9 +24,14 @@ const routes = [
     ],
   },
   {
+    path: "/mylists",
+    name: "mylists",
+    component: () => import("@/views/MyListsView"),
+  },
+  {
     path: "/profile/:username",
     name: "profile",
-    component: () => import("@/views/ProfileView"),
+    component: () => import("@/views/UserView"),
     props: true,
     children: [
       {
@@ -37,7 +42,7 @@ const routes = [
       {
         path: "config",
         name: "profileConfig",
-        component: () => import("@/views/ProfileConfigView"),
+        component: () => import("@/components/UserProfileConfig"),
       },
       // {
       //   path: "userMadeList", <= path 앞에 / 붙이면 루트로 인식됨
