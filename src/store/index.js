@@ -13,6 +13,7 @@ const store = new Vuex.Store({
   state: {
     // 유저 관련
     token: null,
+    isLoggedIn: false,
     username: null,
 
     // http request 관련
@@ -32,6 +33,11 @@ const store = new Vuex.Store({
     isModalOpened: false,
     singleMovieData: {},
     singleMovieReviews: [],
+
+    // my lists 관련
+    singleUserMyLists: [],
+
+    // 장르
     movieGenres: {
       12: "모험",
       14: "판타지",
@@ -55,9 +61,9 @@ const store = new Vuex.Store({
     },
   },
   getters: {
-    isLoggedIn(state) {
-      return !!state.token;
-    },
+    // isLoggedIn(state) {
+    //   return !!state.token;
+    // },
     singleMovieDataGenres(state) {
       // console.log(state.singleMovieData);
       const singleMovieDataGenres = [];
@@ -79,6 +85,7 @@ const store = new Vuex.Store({
     // },
   },
   mutations: {
+    // 유저 관련
     SAVE_TOKEN(state, token) {
       state.token = token;
     },
@@ -86,9 +93,17 @@ const store = new Vuex.Store({
       state.token = null;
       router.push({ name: "main" });
     },
-    // CHANGE_LOG_IN_STATE(state) {
-    //   state.isLoggedIn = !state.isLoggedIn;
-    // },
+    SAVE_USERNAME(state, username) {
+      state.username = username;
+    },
+    DELETE_USERNAME(state) {
+      state.username = null;
+    },
+    CHANGE_LOG_IN_STATE(state) {
+      state.isLoggedIn = !state.isLoggedIn;
+    },
+
+    // 디테일 모달 관련
     CHANGE_MODAL_OPEN_STATE(state) {
       state.isModalOpened = !state.isModalOpened;
     },
@@ -100,6 +115,11 @@ const store = new Vuex.Store({
     },
     DELETE_SINGLE_MOVIE_REVIEWS(state) {
       state.singleMovieReviews = [];
+    },
+
+    // 마이리스트 관련
+    SET_SINGLE_USER_MY_LISTS(state, singleUserMyLists) {
+      state.singleUserMyLists = singleUserMyLists;
     },
   },
   actions: {
@@ -139,10 +159,10 @@ const store = new Vuex.Store({
         },
       })
         .then((res) => {
-          console.log(res);
           alert("로그인성공");
           context.commit("SAVE_TOKEN", res.data.key);
-          // context.commit("CHANGE_LOG_IN_STATE");
+          context.commit("SAVE_USERNAME", username);
+          context.commit("CHANGE_LOG_IN_STATE");
           router.push({ name: "main" });
         })
         .catch((err) => {
@@ -150,34 +170,6 @@ const store = new Vuex.Store({
           console.error(err);
         });
     },
-    getTest() {
-      if (VueCookie.isKey("id")) {
-        alert(VueCookie.get("id"));
-        console.log("getTest", VueCookie.get("id"));
-        // console.log(VueCookie.get("id"));
-        // console.log(String(VueCookie.get("id")));
-        // console.log(VueCookie.get("id").json());
-        // const username = VueCookie.get("id");
-        // console.log(username);
-        // console.log(typeof username);
-        // return username;
-        // return VueCookie.get("id");
-      } else {
-        alert("값 없음");
-      }
-      console.log(VueCookie);
-    },
-    setTest(context, username) {
-      // console.log(this.username);
-      console.log(context);
-      console.log("setTest", username);
-      VueCookie.set("id", username);
-    },
-    resetTest() {
-      alert("삭제됨");
-      VueCookie.remove("id");
-    },
-
     logOut(context) {
       axios({
         method: "post",
@@ -186,15 +178,37 @@ const store = new Vuex.Store({
           Authorization: `Token ${context.state.token}`,
         },
       })
-        .then((res) => {
-          console.log(res);
+        .then(() => {
           alert("로그아웃성공");
-          context.dispatch("resetTest");
+          VueCookie.remove("id");
           context.commit("DELETE_TOKEN");
-          // context.commit("CHANGE_LOG_IN_STATE");
+          context.commit("DELETE_USERNAME");
+          context.commit("CHANGE_LOG_IN_STATE");
         })
         .catch((err) => {
           alert("로그아웃실패");
+          console.log(err);
+        });
+    },
+    profileUpdate(context, payload) {
+      const { username, nickname, age } = payload;
+      axios({
+        method: "put",
+        url: `${context.state.baseUrlLocalServer}/profile/${username}/`,
+        data: {
+          username,
+          nickname,
+          age,
+        },
+        headers: {
+          Authorization: `Token ${context.state.token}`,
+        },
+      })
+        .then(() => {
+          console.log(1);
+          router.push({ name: "profile" });
+        })
+        .catch((err) => {
           console.log(err);
         });
     },
@@ -205,30 +219,6 @@ const store = new Vuex.Store({
       context.commit("CHANGE_MODAL_OPEN_STATE");
       context.commit("SET_SINGLE_MOVIE_DATA", singleMovieData);
     },
-
-    // getSingleMovieData(context, movieId) {
-    //   axios({
-    //     method: "get",
-    //     url: `${context.state.baseUrlTMDB}/movie/${movieId}`,
-    //     params: context.state.paramsTMDB,
-    //   })
-    //     .then((res) => {
-    //       context.commit("SET_SINGLE_MOVIE_DATA", res.data);
-    //       console.log(res);
-    //     })
-    //     .then((res) => {
-    //       const movieId = res.id || res.movie_id;
-    //       axios({
-    //         method: "get",
-    //         url: `${context.state.baseUrlLocalServer}/movies/detail/${movieId}/comment/`,
-    //       }).then((res) => {
-    //         console.log("리뷰", res);
-    //         context.commit("SET_SINGLE_MOVIE_REVIEWS", res.data);
-    //       });
-    //     })
-    //     .catch((err) => console.error(err));
-    // },
-
     getSingleMovieData(context, movieId) {
       axios({
         method: "get",
@@ -266,6 +256,21 @@ const store = new Vuex.Store({
         .then(() => {
           // console.log(res);
           context.dispatch("getSingleMovieReviews", movieId);
+        })
+        .catch((err) => console.error(err));
+    },
+
+    // My Lists 관련
+    getSingleUserMyLists(context) {
+      const username = context.state.username;
+
+      axios({
+        method: "get",
+        url: `${context.state.baseUrlLocalServer}/list/recommend_movie_list/${username}`,
+      })
+        .then((res) => {
+          console.log("get sigle user's lists", res);
+          context.commit("SET_SINGLE_USER_MY_LISTS", res.data);
         })
         .catch((err) => console.error(err));
     },

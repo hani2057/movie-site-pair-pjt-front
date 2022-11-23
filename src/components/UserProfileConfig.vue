@@ -6,34 +6,31 @@
       id="config-form"
       class="d-flex flex-column"
     >
-      <input
-        type="text"
-        id="config-username"
-        class="config__input"
-        v-model="name"
-      />
-      <!-- <input
-        type="password"
-        id="config-password1"
-        class="config__input"
-        v-model="password"
-      /> -->
-      <!-- <input
-        type="password"
-        id="config-password2"
-        class="config__input"
-        v-model="password2"
-      /> -->
-      <input
-        type="nickname"
-        id="config-nickname"
-        class="config__input"
-        :value="nickname"
-      />
-      <!-- v-model="nickname" -->
-      <!-- <input type="age" id="config-age" class="config__input" v-model="age" /> -->
+      <!-- <div>
+        <label for="config-username">username: </label>
+        <input
+          type="text"
+          id="config-username"
+          class="config__input"
+          v-model="name"
+        />
+      </div> -->
+      <div>
+        <label for="config-nickname">nickname: </label>
+        <input
+          type="text"
+          id="config-nickname"
+          class="config__input"
+          v-model="nickname"
+        />
+      </div>
+      <div>
+        <label for="config-age">age: </label>
+        <input type="age" id="config-age" class="config__input" v-model="age" />
+      </div>
       <button type="submit" id="config-btn">변경사항 저장</button>
     </form>
+    <button>비밀번호 변경</button>
   </div>
 </template>
 
@@ -44,28 +41,35 @@ export default {
   name: "UserProfileConfig",
   data() {
     return {
-      user: null,
+      username: null,
+      nickname: null,
+      age: null,
     };
   },
   // props: {
   //   username: String,
   // },
-  computed: {
-    name: this.user.username,
-    // password: this.user.password,
-    nickname: this.user.nickname,
-    // age: this.user.age,
-  },
   methods: {
-    profileUpdate() {},
+    profileUpdate() {
+      const username = this.username;
+      const nickname = this.nickname;
+      const age = this.age;
+
+      const payload = { username, nickname, age };
+
+      this.$store.dispatch("profileUpdate", payload);
+      this.getUserProfile();
+    },
     getUserProfile() {
       axios({
-        methods: "get",
-        url: `${this.$store.state.baseUrlLocalServer}/profile/${this.$route.params.username}`,
+        method: "get",
+        url: `${this.$store.state.baseUrlLocalServer}/profile/${this.$route.params.username}/`,
       })
         .then((res) => {
           console.log("get user", res);
-          this.user = res.data;
+          this.username = res.data.username;
+          this.nickname = res.data.nickname;
+          this.age = res.data.age;
         })
         .catch((err) => {
           console.error(err);

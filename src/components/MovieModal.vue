@@ -18,33 +18,100 @@
                 alt="modal__poster-img"
               />
               <div class="flex-fill">
-                <h4 class="modal__movieTitle py-3">
-                  {{ singleMovieData.title }}
-                </h4>
-                <div class="d-flex justify-content-between">
-                  <div>
-                    <i class="fa-solid fa-star me-1"></i>
-                    <span>{{ singleMovieData.vote_average }}</span> <br />
-                    <span v-if="singleMovieData.release_date">
-                      {{ singleMovieData.release_date }} 개봉
-                    </span>
-                    <p v-if="!singleMovieData.release_date">
-                      개봉일 정보가 없습니다.
-                    </p>
-                    <br />
-                    <span
-                      v-for="genre in singleMovieDataGenres"
-                      :key="genre"
-                      class="badge text-bg-light me-2"
+                <div class="d-flex align-items-center justify-content-between">
+                  <div class="d-flex flex-column align-items-between">
+                    <h4 class="modal__movieTitle py-3">
+                      {{ singleMovieData.title }}
+                    </h4>
+                    <div
+                      class="d-flex justify-content-between align-items-between"
                     >
-                      {{ genre }}
-                    </span>
+                      <div>
+                        <div>
+                          <i class="fa-solid fa-star me-1"></i>
+                          <span>{{ singleMovieData.vote_average }}</span> <br />
+                        </div>
+                        <div>
+                          <span v-if="singleMovieData.release_date">
+                            {{ singleMovieData.release_date }} 개봉
+                          </span>
+                          <p v-if="!singleMovieData.release_date">
+                            개봉일 정보가 없습니다.
+                          </p>
+                        </div>
+                        <div>
+                          <span
+                            v-for="genre in singleMovieDataGenres"
+                            :key="genre"
+                            class="badge text-bg-light me-2"
+                          >
+                            {{ genre }}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="my-3">
+                      <!-- <b-button
+                        v-b-modal.my-list-modal
+                        variant="outline-secondary"
+                        class="putMovieToListBtn"
+                        @click="loadUserMyLists"
+                      >
+                        이 영화를 내 리스트에 추가
+                      </b-button>
+                      <b-modal
+                        id="my-list-modal"
+                        title="My Lists"
+                        modal-header-close="false"
+                      >
+                        <p class="my-4">Hello from modal!</p>
+                      </b-modal> -->
+                      <b-button
+                        v-b-modal.my-list-modal
+                        variant="outline-secondary"
+                        class="putMovieToListBtn"
+                        @click="loadUserMyLists"
+                      >
+                        이 영화를 내 리스트에 추가
+                      </b-button>
+                      <b-modal id="my-list-modal" title="My Lists">
+                        <template #modal-header="{ close }">
+                          <h5>My Lists</h5>
+                          <b-button
+                            size="sm"
+                            variant="outline-dark"
+                            @click="close()"
+                          >
+                            X
+                          </b-button>
+                        </template>
+                        <template #default="{}">
+                          <p>이 영화를 추가할 리스트를 선택해주세요.</p>
+                          <div class="d-flex justify-content-center">
+                            <div
+                              v-for="list in singleUserMyLists"
+                              :key="list.id"
+                            >
+                              <button class="my-list-modal__list-btn">
+                                {{ list.title }}
+                              </button>
+                            </div>
+                            <div>
+                              <button class="my-list-modal__list-btn">
+                                새로 만들기
+                              </button>
+                            </div>
+                          </div>
+                        </template>
+                        <template #modal-footer="{}"> </template>
+                      </b-modal>
+                    </div>
                   </div>
                   <button
                     class="btn btn-outline-light trailerBtn"
                     @click="showTrailer"
                   >
-                    예고편 보기
+                    예고편보기
                   </button>
                 </div>
               </div>
@@ -56,22 +123,36 @@
               </p>
             </div>
             <div class="modal-card__info-review-post">
-              <form @submit.prevent="postReview">
-                <label for="">리뷰 작성</label>
-                <input type="text" v-model="reviewContent" />
+              <span>리뷰 작성</span>
+              <form
+                @submit.prevent="postReview"
+                class="modal-card__info-review-form d-flex"
+              >
                 <input
-                  type="number"
-                  min="0"
-                  max="5"
-                  step="0.5"
-                  v-model="reviewScore"
+                  type="text"
+                  class="modal-card__info-review-content"
+                  v-model="reviewContent"
                 />
-                <button type="submit">등록</button>
+                <star-rating
+                  v-model="reviewScore"
+                  @rating-selected="setReviewScore"
+                  :increment="0.5"
+                  :max-rating="5"
+                  inactive-color="#b3b3b3"
+                  active-color="#fceb26"
+                  :star-size="20"
+                  :show-rating="false"
+                ></star-rating>
+                <button type="submit" class="badge text-bg-light me-2">
+                  등록
+                </button>
               </form>
             </div>
             <div class="modal-card__info-reviews">
               <div v-for="review in singleMovieReviews" :key="review.id">
-                <span> {{ review?.score }}</span>
+                <span>
+                  <i class="fa-solid fa-star me-1"></i>{{ review?.score }} |
+                </span>
                 <span> {{ review?.content }}</span>
               </div>
             </div>
@@ -94,6 +175,8 @@
 
 <script>
 import axios from "axios";
+import StarRating from "vue-star-rating";
+// https://github.com/craigh411/vue-star-rating
 
 export default {
   name: "MovieModal",
@@ -125,6 +208,9 @@ export default {
     // reviewUrlForUpdateDelete: `${this.$store.state.baseUrlLocalServer}/movies/detail/${this.singleMovieData.id}/comment/`
     singleMovieReviews() {
       return this.$store.state.singleMovieReviews;
+    },
+    singleUserMyLists() {
+      return this.$store.state.singleUserMyLists;
     },
   },
   watch: {
@@ -172,47 +258,23 @@ export default {
       console.log(this.singleMovieData);
       const movieId = this.singleMovieData.id || this.singleMovieData.movie_id;
       this.$store.dispatch("getSingleMovieReviews", movieId);
-
-      // console.log(singleMovieId);
-      // axios({
-      //   method: "get",
-      //   // url: this.reviewUrlForGetPost,
-      //   // url: `${this.$store.state.baseUrlLocalServer}/movies/detail/${singleMovieId}/comment/`,
-      //   url: "http://127.0.0.1:8000/movies/detail/16/comment/",
-      // })
-      //   .then((res) => {
-      //     console.log("리뷰", res);
-      //     this.reviews = res.data;
-      //   })
-      //   .catch((err) => console.error(err));
+    },
+    setReviewScore(rating) {
+      this.reviewScore = rating;
     },
     postReview() {
       const content = this.reviewContent;
       const score = this.reviewScore;
       const movieId = this.singleMovieData.id;
-      // console.log(singleMovieId);
-      // console.log(this.$store.state.token);
       const payload = { content, score, movieId };
 
       this.$store.dispatch("postSingleMovieReview", payload);
 
       this.reviewContent = null;
-      this.reviewScore = null;
-      // axios({
-      //   method: "post",
-      //   url: this.reviewUrlForGetPost,
-      //   // url: `${this.$store.state.baseUrlLocalServer}/movies/detail/${singleMovieId}/comment/`,
-      //   data: { content: reviewContent, score: reviewScore },
-      //   headers: {
-      //     Authorization: `Token ${this.$store.state.token}`,
-      //   },
-      // })
-      //   .then((res) => {
-      //     console.log(res);
-      //   })
-      //   .catch((err) => console.error(err));
-
-      // this.getMovieReviews();
+      this.reviewScore = 0;
+    },
+    loadUserMyLists() {
+      this.$store.dispatch("getSingleUserMyLists");
     },
   },
   // beforeRouteUpdate() {
@@ -220,6 +282,9 @@ export default {
   // },
   created() {
     this.getMovieReviews();
+  },
+  components: {
+    StarRating,
   },
 };
 </script>
@@ -272,9 +337,10 @@ export default {
   -webkit-box-orient: vertical;
   word-wrap: break-word;
   /* white-space: nowrap; */
-  text-overflow: ellipsis;
-  height: 6em;
+  /* text-overflow: ellipsis; */
+  /* height: 6em; */
   overflow: hidden;
+  margin: 10px 0px;
 }
 .modal__poster-img {
   width: 150px;
@@ -285,75 +351,43 @@ export default {
   height: 30px;
   color: yellow;
 }
+.putMovieToListBtn {
+  color: var(----main-text-color) !important;
+}
+.my-list-modal__list-btn {
+  width: 300px;
+  height: 50px;
+  background-color: rgba(0, 0, 0, 0.1);
+  border: none;
+  border-radius: 10px;
+  color: white;
+}
 .trailerBtn {
+  width: 110px;
   height: 75px;
+}
+.modal-card__info-review-post {
+  border-top: 1px solid #b3b3b3;
+  border-bottom: 1px solid #b3b3b3;
+  padding: 10px 0px;
+}
+.modal-card__info-review-form {
+  align-items: center;
+  justify-content: space-between;
+}
+.modal-card__info-review-content {
+  width: 350px;
+}
+.modal-card__info-reviews {
+  margin: 10px 0px;
 }
 .modal-card__space {
   padding-left: 20px;
   width: 50%;
   height: 100%;
 }
-/* .modal-card__space-trailer {
-  width: 100%;
-  height: 50%;
-  overflow: hidden;
-} */
 
-/* .presentation {
-  z-index: 1200;
-  position: absolute;
-}
-.wrapper-modal {
-  position: fixed;
-  inset: 0px;
-  background-color: rgb(0 0 0 / 71%);
-  -webkit-tap-highlight-color: transparent;
-  display: flex;
-  justify-content: center;
-} */
-/* .modal {
-  position: relative;
-  max-width: 800px;
-  box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2),
-    0px 5px 8px 0px rgba(0, 0, 0, 0.14), 0px 1px 14px 0px rgba(0, 0, 0, 0.12);
-  background: #111;
-  overflow: hidden;
-  border-radius: 8px;
-  transition: all 400ms ease-in-out 2s;
-  animation: fadeIn 400ms;
-}
-.modal-close {
-  position: absolute;
-  right: 20px;
-  top: 20px;
-  cursor: pointer;
-  z-index: 1000;
-  color: white;
-}
-.modal__poster-img {
-  width: 100%;
-  height: auto;
-}
-.modal__content {
-  padding: 40px;
-  color: white;
-}
-.modal__title {
-  padding: 0;
-  font-size: 40px;
-  margin: 16px 0;
-}
-.modal__details {
-  font-weight: 600;
-  font-size: 18px;
-}
-.modal__overview {
-  font-size: 20px;
-  line-height: 1.5;
-}
-.modal__user-perc {
-  color: #46d369;
-}
+/*
 .modal::-webkit-scrollbar {
   display: none;
   visibility: hidden;

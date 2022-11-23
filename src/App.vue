@@ -46,6 +46,6 @@ nav a.router-link-exact-active {
   color: #42b983;
 } */
 .component-wrapper {
-  padding-top: 50px;
+  padding-top: 100px;
 }
 </style>

@@ -2,13 +2,13 @@
   <div>
     <h1>Profile</h1>
     <p>아이디 : {{ user?.email }}</p>
-    <p>{{ user.username }}</p>
-    <p>{{ user.first_name }}</p>
-    <p>{{ user.lsst_name }}</p>
-    <p>{{ user.email }}</p>
-    <p>{{ user.nick_name }}</p>
-    <p>{{ user.age }}</p>
-    <p>{{ user }}</p>
+    <p>{{ user?.username }}</p>
+    <!-- <p>{{ user.first_name }}</p> -->
+    <!-- <p>{{ user.lsst_name }}</p> -->
+    <!-- <p>{{ user.email }}</p> -->
+    <p>{{ user?.nickname }}</p>
+    <p>{{ user?.age }}</p>
+    <!-- <p>{{ user }}</p> -->
   </div>
 </template>
 
@@ -25,9 +25,6 @@ export default {
   props: {
     username: String,
   },
-  created() {
-    this.getUserProfile();
-  },
   methods: {
     getUserProfile() {
       axios({
@@ -42,6 +39,9 @@ export default {
           console.error(err);
         });
     },
+  },
+  created() {
+    this.getUserProfile();
   },
 };
 </script>
