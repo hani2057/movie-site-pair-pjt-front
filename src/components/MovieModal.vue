@@ -32,7 +32,6 @@
                       개봉일 정보가 없습니다.
                     </p>
                     <br />
-
                     <span
                       v-for="genre in singleMovieDataGenres"
                       :key="genre"
@@ -50,12 +49,8 @@
                 </div>
               </div>
             </div>
-
-            <div>
-              <p class="modal-card__info-overview">
-                {{ singleMovieData.overview }}
-              </p>
-
+            <div class="modal-card__info-overview">
+              <p>{{ singleMovieData.overview }}</p>
               <p v-if="!singleMovieData.overview">
                 이 영화는 상세정보를 제공하지 않습니다.
               </p>
@@ -90,7 +85,6 @@
               frameborder="0"
               class="modal-card__space-trailer"
             ></iframe>
-
             <p v-if="!trailerExists">재생할 예고편이 없습니다.</p>
           </div>
         </div>
@@ -178,7 +172,6 @@ export default {
     getMovieReviews() {
       console.log(this.singleMovieData);
       const movieId = this.singleMovieData.id || this.singleMovieData.movie_id;
-
       this.$store.dispatch("getSingleMovieReviews", movieId);
 
       // console.log(singleMovieId);
@@ -223,9 +216,6 @@ export default {
       // this.getMovieReviews();
     },
   },
-  beforeRouteUpdate() {
-    this.getMovieReviews();
-  },
   // beforeRouteUpdate() {
   //   this.getMovieReviews();
   // },
@@ -250,9 +240,7 @@ export default {
 }
 .modal-card {
   position: relative;
-
   max-width: 60%;
-
   min-width: 1100px;
   margin: auto;
   margin-top: 50px;
@@ -284,9 +272,7 @@ export default {
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   word-wrap: break-word;
-
   /* white-space: nowrap; */
-
   text-overflow: ellipsis;
   height: 6em;
   overflow: hidden;

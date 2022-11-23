@@ -95,6 +95,16 @@ export default {
       this.$store.dispatch("logOut");
     },
   },
+  computed: {
+    isLoggedIn() {
+      return this.$store.state.isLoggedIn;
+    },
+  },
+  watch: {
+    isLoggedIn(val) {
+      console.log(val);
+    },
+  },
 };
 </script>
 
