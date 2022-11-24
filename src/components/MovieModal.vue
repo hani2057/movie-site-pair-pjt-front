@@ -94,7 +94,10 @@
                               v-for="list in singleUserMyLists"
                               :key="list.id"
                             >
-                              <button class="my-list-modal__list-btn">
+                              <button
+                                class="my-list-modal__list-btn"
+                                @focus="setChosenList"
+                              >
                                 {{ list.title }}
                               </button>
                             </div>
@@ -108,7 +111,11 @@
                           </div>
                         </template>
                         <template #modal-footer>
-                          <b-button variant="secondary">추가하기</b-button>
+                          <b-button
+                            variant="secondary"
+                            @click="addSingleMovieToList"
+                            >추가하기</b-button
+                          >
                         </template>
                       </b-modal>
                     </div>
@@ -196,6 +203,7 @@ export default {
       reviews: [],
       reviewContent: null,
       reviewScore: null,
+      chosenList: null,
     };
   },
   computed: {
@@ -282,7 +290,30 @@ export default {
     loadUserMyLists() {
       this.$store.dispatch("getSingleUserMyLists");
     },
+    addSingleMovieToList() {
+      console.log(this.chosenList);
+      axios({
+        method: "get",
+        url: `${
+          this.$store.state.baseUrlLocalServer
+        }/list/recommend_movie_append/${this.chosenList.id}/${
+          this.singleMovieData.id || this.singleMovieData.movie_id
+        }/`,
+      })
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => console.error(err));
+    },
+    setChosenList(e) {
+      const chosenList = this.singleUserMyLists.filter(
+        (list) => list.title === e.target.innerText
+      );
+      this.chosenList = chosenList[0];
+      console.log(this.chosenList);
+    },
   },
+
   // beforeRouteUpdate() {
   //   this.getMovieReviews();
   // },

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>profile config page</h1>
+    <h1>회원정보 수정</h1>
     <form
       @submit.prevent="profileUpdate"
       id="config-form"

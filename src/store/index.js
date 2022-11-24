@@ -131,8 +131,6 @@ const store = new Vuex.Store({
       const genre_pick_2 = genre_pick[1] || null;
       const genre_pick_3 = genre_pick[2] || null;
 
-      console.log(genre_pick_2);
-
       axios({
         method: "post",
         url: `${context.state.baseUrlLocalServer}/accounts/signup/`,
