@@ -112,7 +112,7 @@ h2 {
   cursor: pointer;
   width: 50px;
   height: 50px;
-  z-index: 100;
+  z-index: 30;
   border-radius: 50%;
   background: rgba(20, 20, 20, 0.7);
   /* height: 100%; */

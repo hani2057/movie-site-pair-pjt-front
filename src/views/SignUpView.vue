@@ -2,7 +2,7 @@
   <div class="component-wrapper">
     <div class="signup-page d-flex justify-content-center align-items-center">
       <div class="signup-wrapper d-flex flex-column align-items-center">
-        <h1 class="pb-4">TiCi</h1>
+        <h1 class="pb-4">T i C i</h1>
         <form
           @submit.prevent="signUp"
           id="signup-form"
@@ -33,7 +33,7 @@
             v-model="password2"
           />
           <input
-            type="nickname"
+            type="text"
             id="signup-nickname"
             class="signup__input"
             placeholder="NICK NAME"
@@ -41,52 +41,60 @@
             v-model="nickname"
           />
           <input
-            type="age"
+            type="number"
             id="signup-age"
             class="signup__input"
             placeholder="AGE"
+            max="120"
+            min="1"
             required
             v-model="age"
           />
-          <fieldset>
-            <legend>선호하는 영화 장르를 선택해주세요:</legend>
+          <fieldset class="pt-2 pb-4 genre-choise">
+            <legend>선호하는 영화 장르를 최대 2개까지 선택해주세요:</legend>
 
             <input
               type="checkbox"
               name="genre"
               value="28"
               @click="getGenrePicked"
-            />액션
+            />
+            <span>액션</span>
             <input
               type="checkbox"
               name="genre"
               value="10749"
               @click="getGenrePicked"
-            />로맨스
+            />
+            <span>로맨스</span>
             <input
               type="checkbox"
               name="genre"
               value="53"
               @click="getGenrePicked"
-            />스릴러
+            />
+            <span>스릴러</span>
             <input
               type="checkbox"
               name="genre"
               value="35"
               @click="getGenrePicked"
-            />코미디
+            />
+            <span>코미디</span>
             <input
               type="checkbox"
               name="genre"
               value="14"
               @click="getGenrePicked"
-            />판타지
+            />
+            <span>판타지</span>
             <input
               type="checkbox"
               name="genre"
               value="16"
               @click="getGenrePicked"
-            />애니메이션
+            />
+            <span>애니메이션</span>
           </fieldset>
           <b-button type="submit" id="signup-btn" variant="light">
             SIGN UP
@@ -233,5 +241,11 @@ select::-ms-expand {
   to {
     box-shadow: 2px 2px 5px rgba(255, 255, 255, 0.3);
   }
+}
+.genre-choise input {
+  margin-right: 5px;
+}
+.genre-choise span {
+  margin-right: 10px;
 }
 </style>

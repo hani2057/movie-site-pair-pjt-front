@@ -334,7 +334,7 @@ export default {
   position: fixed;
   left: 0;
   top: 0;
-  z-index: 30;
+  z-index: 40;
 }
 .modal-overlay {
   background-color: rgb(0 0 0 / 71%);
@@ -351,7 +351,7 @@ export default {
   object-fit: cover;
   min-height: 500px;
   /* max-height: 50vh; */
-  z-index: 40;
+  z-index: 50;
   transition: all 400ms ease-in-out 2s;
   animation: fadeIn 400ms;
 }

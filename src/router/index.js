@@ -84,17 +84,17 @@ const router = new VueRouter({
   routes,
 });
 
-// router.beforeEach((to, from, next) => {
-//   const isLoggedIn = this.$store.state.isLoggedIn;
-//   const authRequiredPages = [];
-//   const isAuthRequired = authPages.includes(to.name);
+router.beforeEach((to, from, next) => {
+  const isLoggedIn = store.state.isLoggedIn;
+  const authRequiredPages = ["profile", "userProfile", "profileConfig"];
+  const isAuthRequired = authRequiredPages.includes(to.name);
 
-//   if (isAuthRequired && !isLoggedIn) {
-//     next({ name: "login" });
-//   } else {
-//     next();
-//   }
-// });
+  if (isAuthRequired && !isLoggedIn) {
+    next({ name: "login" });
+  } else {
+    next();
+  }
+});
 // router.beforeEnter((to, from, next) => {
 //   let access_token = Vue.cookie.get('id')
 //   if (access_token == null) {
