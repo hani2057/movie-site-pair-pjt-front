@@ -107,7 +107,9 @@
                             </div>
                           </div>
                         </template>
-                        <template #modal-footer="{}"> </template>
+                        <template #modal-footer>
+                          <b-button variant="secondary">추가하기</b-button>
+                        </template>
                       </b-modal>
                     </div>
                   </div>
