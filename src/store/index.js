@@ -14,6 +14,7 @@ const store = new Vuex.Store({
     // 유저 관련
     token: null,
     isLoggedIn: false,
+    isUserAdult: false,
     username: null,
 
     // http request 관련
@@ -80,9 +81,6 @@ const store = new Vuex.Store({
 
       return singleMovieDataGenres;
     },
-    singleUserMyLists(state) {
-      return state.singleUserMyLists;
-    },
     // isModalOpened(state) {
     //   return state.isModalOpened;
     // },
@@ -106,39 +104,56 @@ const store = new Vuex.Store({
       state.isLoggedIn = !state.isLoggedIn;
     },
 
+    //
     // 디테일 모달 관련
+    //
+    // 모달창 열고 닫기
     CHANGE_MODAL_OPEN_STATE(state) {
       state.isModalOpened = !state.isModalOpened;
     },
+    // 현재 선택된 영화 정보를 저장
     SET_SINGLE_MOVIE_DATA(state, singleMovieData) {
       state.singleMovieData = singleMovieData;
     },
+    // 현재 선택된 영화에 달린 리뷰 정보를 가져와 저장
     SET_SINGLE_MOVIE_REVIEWS(state, singleMovieReviews) {
       state.singleMovieReviews = singleMovieReviews;
     },
-    DELETE_SINGLE_MOVIE_REVIEWS(state) {
-      state.singleMovieReviews = [];
-    },
+    // 현재 선택된 영화에 달린 리뷰를 삭제
+    // 수정요
+    // DELETE_SINGLE_MOVIE_REVIEWS(state) {
+    //   state.singleMovieReviews = [];
+    // },
 
+    //
     // 마이리스트 관련
+    //
+    // 유저의 my list들을 가져옴
     SET_SINGLE_USER_MY_LISTS(state, singleUserMyLists) {
       state.singleUserMyLists = singleUserMyLists;
     },
+    // 새로운 my list를 만듦
+    MAKE_SIGLE_MY_LIST(state, newMyList) {
+      state.singleUserMyLists.push(newMyList);
+    },
+    // listId에 해당하는 my list 삭제
     DELETE_SINGLE_MY_LIST(state, listId) {
       state.singleUserMyLists = state.singleUserMyLists.filter(
         (list) => list.id !== listId
       );
     },
+    // listId에 해당하는 my list에서 movieId에 해당하는 영화 삭제
     DELETE_SINGLE_MOVIE_FROM_LIST(state, payload) {
       const { listId, movieId } = payload;
-      state.singleUserMyLists = state.singleUserMyLists.forEach((list) => {
+      state.singleUserMyLists = [...state.singleUserMyLists].map((list) => {
         if (list.id === listId) {
-          list.movies.filter((id) => id !== movieId);
-          return list;
+          list.movies = list.movies.filter((id) => id !== movieId);
         }
+        return list;
       });
     },
   },
+
   actions: {
     signUp(context, payload) {
       const {
@@ -303,7 +318,23 @@ const store = new Vuex.Store({
         })
         .catch((err) => console.error(err));
     },
-    makeNewMyList() {},
+    makeNewMyList(context, listTitle) {
+      axios({
+        method: "post",
+        url: `${context.state.baseUrlLocalServer}/list/recommend_movie_list_create/`,
+        data: {
+          title: listTitle,
+        },
+        headers: {
+          Authorization: `Token ${context.state.token}`,
+        },
+      })
+        .then((res) => {
+          console.log(res);
+          context.commit("MAKE_SIGLE_MY_LIST", res.data);
+        })
+        .catch((err) => console.error(err));
+    },
     deleteMyList(context, listId) {
       axios({
         method: "delete",
@@ -321,7 +352,9 @@ const store = new Vuex.Store({
         method: "get",
         url: `${context.state.baseUrlLocalServer}/list/recommend_movie_delete/${listId}/${movieId}/`,
       })
-        .then(() => {
+        .then((res) => {
+          console.log("delete", res);
+          console.log(payload);
           context.commit("DELETE_SINGLE_MOVIE_FROM_LIST", payload);
         })
         .catch((err) => console.error(err));

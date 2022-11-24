@@ -1,7 +1,7 @@
 <template>
   <div>
-    <section className="row">
-      <h2>{{ title }}</h2>
+    <section class="row mb-4">
+      <h2 class="row__title">{{ title }}</h2>
       <div class="slider">
         <div class="slider__arrow-left" @click="slideLeft">
           <span class="arrow">
@@ -23,6 +23,10 @@
               } `"
               :alt="movie.name"
             />
+            <div
+              class="row__poster-hide"
+              v-if="movie.adult && !$store.state.isUserAdult"
+            ></div>
             <span class="row__posterTitle">{{ movie.title }}</span>
           </div>
         </div>
@@ -75,19 +79,36 @@ export default {
 
     if (this.id === "MR") {
       baseURL = this.$store.state.baseUrlLocalServer;
-      // params = "";
     }
 
-    axios({
-      method: "get",
-      url: `${baseURL}${this.fetchUrl}`,
-      params: this.$store.state.paramsTMDB,
-    })
-      .then((res) => {
-        this.movies = res.data.results || res.data;
-        // this.movies = res.data;
+    if (this.$store.state.isLoggedIn) {
+      axios({
+        method: "get",
+        url: `${baseURL}${this.fetchUrl}`,
+        params: this.$store.state.paramsTMDB,
+        headers: {
+          Authorization: `Token ${this.$store.state.token}`,
+        },
       })
-      .catch((err) => console.error(err));
+        .then((res) => {
+          this.movies = res.data.results || res.data;
+          // this.movies = res.data;
+        })
+        .catch((err) => console.error(err));
+    } else {
+      // params = "";
+
+      axios({
+        method: "get",
+        url: `${baseURL}${this.fetchUrl}`,
+        params: this.$store.state.paramsTMDB,
+      })
+        .then((res) => {
+          this.movies = res.data.results || res.data;
+          // this.movies = res.data;
+        })
+        .catch((err) => console.error(err));
+    }
   },
 };
 </script>
@@ -97,7 +118,7 @@ export default {
   margin-left: 20px;
   color: white;
 }
-h2 {
+.row__title {
   padding-left: 20px;
 }
 .slider {
@@ -125,10 +146,10 @@ h2 {
   transform: translateY(-50%);
 }
 .slider__arrow-left {
-  left: 0;
+  left: 10px;
 }
 .slider__arrow-right {
-  right: 0;
+  right: 10px;
 }
 .arrow:hover {
   transition: 400ms all ease-in-out;
@@ -175,6 +196,14 @@ h2 {
   object-fit: contain;
   width: 100%;
   height: 100%;
+}
+.row__poster-hide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: black;
 }
 .row__posterTitle {
   position: absolute;

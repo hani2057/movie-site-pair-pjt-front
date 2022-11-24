@@ -51,21 +51,6 @@
                       </div>
                     </div>
                     <div class="my-3">
-                      <!-- <b-button
-                        v-b-modal.my-list-modal
-                        variant="outline-secondary"
-                        class="putMovieToListBtn"
-                        @click="loadUserMyLists"
-                      >
-                        이 영화를 내 리스트에 추가
-                      </b-button>
-                      <b-modal
-                        id="my-list-modal"
-                        title="My Lists"
-                        modal-header-close="false"
-                      >
-                        <p class="my-4">Hello from modal!</p>
-                      </b-modal> -->
                       <b-button
                         v-b-modal.my-list-modal
                         variant="outline-secondary"
@@ -110,28 +95,35 @@
                               <span>test</span>
                             </button> -->
 
-                            <div>
+                            <form @submit.prevent="makeNewMyList">
                               <input
+                                type="text"
                                 class="my-list-modal__new-list-btn"
                                 placeholder="Make New My List"
                                 @focus="changePlaceholder"
                                 @blur="resetPlaceholder"
-                                @keyup.enter="makeNewMyList"
+                                v-model.trim="newMyListTitle"
                               />
                               <!-- <button
                                 class="my-list-modal__list-btn my-list-modal__new-list-btn"
                               >
                                 Make New My List
                               </button> -->
-                            </div>
+                            </form>
                           </div>
                         </template>
                         <template #modal-footer>
+                          <!-- <div class="my-list-modal__footer">
+                            <p class="my-list-modal__footer-p">
+                              My List 수정 및 삭제는 마이페이지에서 가능합니다:)
+                            </p>
+                          </div> -->
                           <b-button
                             variant="secondary"
                             @click="addSingleMovieToList"
-                            >추가하기</b-button
                           >
+                            추가하기
+                          </b-button>
                         </template>
                       </b-modal>
                     </div>
@@ -220,6 +212,7 @@ export default {
       reviewContent: null,
       reviewScore: null,
       chosenList: null,
+      newMyListTitle: null,
     };
   },
   computed: {
@@ -303,8 +296,12 @@ export default {
       this.reviewScore = 0;
     },
     loadUserMyLists() {
-      this.$store.dispatch("getSingleUserMyLists");
-      this.singleUserMyLists = this.$store.state.singleUserMyLists;
+      if (!this.$store.state.isLoggedIn) {
+        alert("로그인이 필요한 서비스입니다.");
+      } else {
+        this.$store.dispatch("getSingleUserMyLists");
+        this.singleUserMyLists = this.$store.state.singleUserMyLists;
+      }
     },
     changePlaceholder(e) {
       e.target.placeholder = "생성할 My List의 제목을 입력하고 엔터!";
@@ -313,26 +310,10 @@ export default {
       e.target.placeholder = "Make New My List";
     },
     makeNewMyList(e) {
-      axios({
-        method: "post",
-        url: `${this.$store.state.baseUrlLocalServer}/list/recommend_movie_list_create/`,
-        data: {
-          title: e.target.value,
-        },
-        headers: {
-          Authorization: `Token ${this.$store.state.token}`,
-        },
-      })
-        .then((res) => {
-          console.log(res);
-        })
-        .catch((err) => console.error(err));
-
-      e.target.value = "";
-      e.target.blur();
-
-      this.loadUserMyLists();
-      this.$forceUpdate;
+      this.$store.dispatch("makeNewMyList", this.newMyListTitle);
+      console.log(e);
+      this.newMyListTitle = "";
+      e.target[0].blur();
     },
     addSingleMovieToList() {
       console.log(this.chosenList);
@@ -366,7 +347,7 @@ export default {
   // beforeRouteUpdate() {
   //   this.getMovieReviews();
   // },
-  created() {
+  mounted() {
     this.getMovieReviews();
   },
   components: {
@@ -561,15 +542,35 @@ export default {
   text-align: center;
   color: var(--main-bg-color);
 }
-/* .my-list-modal__list-btn:focus {
-  background-color: var(--main-bg-color);
-  color: white;
-  font-weight: 700;
-} */
+.my-list-modal__list-btn:focus {
+  border: 2px solid rgba(2, 126, 251, 1);
+  color: rgba(2, 126, 251, 1);
+  background: transparent;
+  font-weight: 900;
+}
+.my-list-modal__list-btn:focus span {
+  /* border: 2px solid rgba(2, 126, 251, 1); */
+  color: rgba(2, 126, 251, 1);
+  /* background: transparent; */
+  /* font-weight: 700; */
+}
+
 .my-list-modal__new-list-btn:focus::placeholder {
-  color: white;
+  /* color: white; */
   font-weight: 100;
   font-size: 0.8rem;
+}
+/* .my-list-modal__footer {
+  position: relative;
+} */
+.my-list-modal__footer-p {
+  /* position: absolute; */
+  /* text-align: left; */
+  left: 5px;
+  color: var(--main-bg-color);
+  /* font-size: 0.8rem; */
+  font-weight: 200;
+  float: left;
 }
 .trailerBtn {
   width: 110px;

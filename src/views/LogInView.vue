@@ -42,9 +42,6 @@ import VueCookie from "vue-cookies";
 
 export default {
   name: "LogInView",
-  // components:{
-  //   CookieTest,
-  // },
   data() {
     return {
       username: null,
@@ -62,9 +59,9 @@ export default {
       };
       VueCookie.set("id", username);
       this.$store.dispatch("logIn", payload);
-      // this.setTest();
-      // this.$store.dispatch("setTest", username);
     },
+    // this.setTest();
+    // this.$store.dispatch("setTest", username);
     // getTest() {
     //   if (VueCookie.isKey("id")) {
     //     alert(VueCookie.get("id"));
