@@ -124,6 +124,20 @@ const store = new Vuex.Store({
     SET_SINGLE_USER_MY_LISTS(state, singleUserMyLists) {
       state.singleUserMyLists = singleUserMyLists;
     },
+    DELETE_SINGLE_MY_LIST(state, listId) {
+      state.singleUserMyLists = state.singleUserMyLists.filter(
+        (list) => list.id !== listId
+      );
+    },
+    DELETE_SINGLE_MOVIE_FROM_LIST(state, payload) {
+      const { listId, movieId } = payload;
+      state.singleUserMyLists = state.singleUserMyLists.forEach((list) => {
+        if (list.id === listId) {
+          list.movies.filter((id) => id !== movieId);
+          return list;
+        }
+      });
+    },
   },
   actions: {
     signUp(context, payload) {
@@ -290,7 +304,28 @@ const store = new Vuex.Store({
         .catch((err) => console.error(err));
     },
     makeNewMyList() {},
-    deleteMyList() {},
+    deleteMyList(context, listId) {
+      axios({
+        method: "delete",
+        url: `${context.state.baseUrlLocalServer}/list/recommend_movie_list_delete/${listId}/`,
+      })
+        .then((res) => {
+          context.commit("DELETE_SINGLE_MY_LIST", listId);
+          console.log(res);
+        })
+        .catch((err) => console.error(err));
+    },
+    deleteSingleMovieFromList(context, payload) {
+      const { listId, movieId } = payload;
+      axios({
+        method: "get",
+        url: `${context.state.baseUrlLocalServer}/list/recommend_movie_delete/${listId}/${movieId}/`,
+      })
+        .then(() => {
+          context.commit("DELETE_SINGLE_MOVIE_FROM_LIST", payload);
+        })
+        .catch((err) => console.error(err));
+    },
   },
   modules: {},
 });

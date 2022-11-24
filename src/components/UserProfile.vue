@@ -2,29 +2,36 @@
   <div>
     <div>
       <h1>{{ user?.nickname }}</h1>
-      <p>ID: {{ user?.username }}</p>
+      <p>@ {{ user?.username }}</p>
       <!-- <p>{{ user?.username }}</p> -->
       <!-- <p>{{ user.first_name }}</p> -->
       <!-- <p>{{ user.lsst_name }}</p> -->
       <!-- <p>{{ user.email }}</p> -->
       <!-- <p>NICKNAME: {{ user?.nickname }}</p> -->
       <p>AGE:{{ user?.age }}</p>
+      <p>나이에 따라 성인이면 어떤 이모지 미성년이면 어떤 이모지 표시</p>
       <!-- <p>{{ user }}</p> -->
     </div>
     <div>
       <span>My Lists</span>
+      <hr />
       <div v-for="list in singleUserMyLists" :key="list.id">
         {{ list.title }}
+        <button @click="deleteMyList(list.id)">리스트삭제</button>
         {{ list }}
-        <div v-for="movieId in list.movie" :key="`${list.title}-${movieId}`">
+        <div v-for="movieId in list.movies" :key="`${list.title}-${movieId}`">
           <img
             :src="`https://api.themoviedb.org/3/movie/${movieId}/images?api_key=1c2f0f92339bff124d15c1fa1db21c85`"
             :alt="movieId"
           />
+          <button @click="deleteSingleMovieFromList(list.id, movieId)">
+            영화 삭제
+          </button>
         </div>
       </div>
-      {{ singleUserMyLists }}
     </div>
+    <hr />
+    {{ singleUserMyLists }}
   </div>
 </template>
 
@@ -41,6 +48,11 @@ export default {
   computed: {
     singleUserMyLists() {
       return this.$store.state.singleUserMyLists;
+    },
+  },
+  watch: {
+    singleUserMyLists(val) {
+      console.log("watch", val);
     },
   },
   props: {
@@ -60,11 +72,12 @@ export default {
           console.error(err);
         });
     },
-    deleteMyList() {
-      axios({
-        method: "delete",
-        url: `${this.$store.state.baseUrlLocalServer}/list/recommend_movie_list_delete/<int:list_pk>/`,
-      });
+    deleteMyList(listId) {
+      this.$store.dispatch("deleteMyList", listId);
+    },
+    deleteSingleMovieFromList(listId, movieId) {
+      const payload = { listId, movieId };
+      this.$store.dispatch("deleteSingleMovieFromList", payload);
     },
   },
   created() {
