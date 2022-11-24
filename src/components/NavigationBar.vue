@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-nav class="fixed-top d-flex flex justify-content-between">
+    <b-nav class="fixed-top d-flex flex justify-content-between" id="navbar">
       <b-nav-item
         :to="{ name: 'main' }"
         exact
@@ -17,7 +17,7 @@
         :to="{ name: 'mylists' }"
         exact
         exact-active-class="active"
-        id="my-lists-logo"
+        id="my-lists-nav"
       >
         My Lists
       </b-nav-item>
@@ -42,7 +42,8 @@
         </b-nav-item>
         <b-nav-item-dropdown v-if="isLoggedIn">
           <template #button-content>
-            <img src="@/statics/smile.png" style="width: 40px; height: 40px" />
+            <i class="fa-solid fa-bars" id="menu-btn-nav"></i>
+            <!-- <img src="@/statics/smile.png" style="width: 40px; height: 40px" /> -->
           </template>
 
           <b-dropdown-item
@@ -88,6 +89,10 @@ export default {
 </script>
 
 <style>
+#navbar {
+  background-color: var(--main-bg-color);
+  padding-bottom: 5px;
+}
 .nav-item__login,
 .nav-item__signup {
   display: inline-block;
@@ -208,7 +213,12 @@ body {
     bottom: 100%;
   }
 }
-#my-lists-logo {
+#my-lists-nav {
   margin-top: 15px;
+}
+#menu-btn-nav {
+  font-size: 30px;
+  color: var(--main-text-color);
+  margin-top: 10px;
 }
 </style>

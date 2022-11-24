@@ -1,12 +1,12 @@
 <template>
   <div class="component-wrapper">
-    <SearchBar />
+    <!-- <SearchBar /> -->
   </div>
 </template>
 
 <script>
 import axios from "axios";
-import SearchBar from "@/components/SearchBar";
+// import SearchBar from "@/components/SearchBar";
 
 export default {
   name: "MyListsView",
@@ -22,20 +22,22 @@ export default {
         .catch((err) => console.error(err));
     },
     getSingleUserMyLists() {
-      const username = this.$store.state.username;
+      this.$store.dispatch("getSingleUserMyLists");
 
-      axios({
-        method: "get",
-        url: `${this.$store.state.baseUrlLocalServer}/list/recommend_movie_list/${username}`,
-      })
-        .then((res) => {
-          console.log("get sigle user's lists", res);
-        })
-        .catch((err) => console.error(err));
+      // const username = this.$store.state.username;
+
+      // axios({
+      //   method: "get",
+      //   url: `${this.$store.state.baseUrlLocalServer}/list/recommend_movie_list/${username}`,
+      // })
+      //   .then((res) => {
+      //     console.log("get sigle user's lists", res);
+      //   })
+      //   .catch((err) => console.error(err));
     },
   },
   components: {
-    SearchBar,
+    // SearchBar,
   },
   created() {
     this.getAllMyLists();

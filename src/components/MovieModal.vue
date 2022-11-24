@@ -76,7 +76,7 @@
                       </b-button>
                       <b-modal id="my-list-modal" title="My Lists">
                         <template #modal-header="{ close }">
-                          <h5>My Lists</h5>
+                          <h5 class="my-list-modal__title">My Lists</h5>
                           <b-button
                             size="sm"
                             variant="outline-dark"
@@ -86,8 +86,10 @@
                           </b-button>
                         </template>
                         <template #default="{}">
-                          <p>이 영화를 추가할 리스트를 선택해주세요.</p>
-                          <div class="d-flex justify-content-center">
+                          <p class="my-list-modal__content">
+                            이 영화를 추가할 리스트를 선택해주세요.
+                          </p>
+                          <div class="d-flex flex-column align-items-center">
                             <div
                               v-for="list in singleUserMyLists"
                               :key="list.id"
@@ -97,8 +99,10 @@
                               </button>
                             </div>
                             <div>
-                              <button class="my-list-modal__list-btn">
-                                새로 만들기
+                              <button
+                                class="my-list-modal__list-btn my-list-modal__new-list-btn"
+                              >
+                                Make New My List
                               </button>
                             </div>
                           </div>
@@ -354,13 +358,27 @@ export default {
 .putMovieToListBtn {
   color: var(----main-text-color) !important;
 }
+#my-list-modal {
+  font-family: "Ubuntu", Helvetica, Arial, sans-serif;
+}
+.my-list-modal__title,
+.my-list-modal__content {
+  color: var(--main-bg-color);
+}
 .my-list-modal__list-btn {
   width: 300px;
-  height: 50px;
-  background-color: rgba(0, 0, 0, 0.1);
-  border: none;
-  border-radius: 10px;
+  height: 40px;
+  background-color: var(----main-text-color);
+  border: 2px solid var(--main-bg-color);
+  margin-bottom: 5px;
+}
+.my-list-modal__new-list-btn {
+  background-color: rgba(0, 0, 0, 0.15);
+}
+.my-list-modal__list-btn:focus {
+  background-color: var(--main-bg-color);
   color: white;
+  font-weight: 700;
 }
 .trailerBtn {
   width: 110px;

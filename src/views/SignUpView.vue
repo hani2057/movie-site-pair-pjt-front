@@ -13,6 +13,7 @@
             id="signup-username"
             class="signup__input"
             placeholder="ID"
+            required
             v-model="username"
           />
           <input
@@ -20,6 +21,7 @@
             id="signup-password1"
             class="signup__input"
             placeholder="PASSWORD"
+            required
             v-model="password1"
           />
           <input
@@ -27,6 +29,7 @@
             id="signup-password2"
             class="signup__input"
             placeholder="PASSWORD CONFIRMATION"
+            required
             v-model="password2"
           />
           <input
@@ -34,6 +37,7 @@
             id="signup-nickname"
             class="signup__input"
             placeholder="NICK NAME"
+            required
             v-model="nickname"
           />
           <input
@@ -41,9 +45,52 @@
             id="signup-age"
             class="signup__input"
             placeholder="AGE"
+            required
             v-model="age"
           />
-          <button type="submit" id="signup-btn">SIGN UP</button>
+          <fieldset>
+            <legend>선호하는 영화 장르를 선택해주세요:</legend>
+
+            <input
+              type="checkbox"
+              name="genre"
+              value="28"
+              @click="getGenrePicked"
+            />액션
+            <input
+              type="checkbox"
+              name="genre"
+              value="10749"
+              @click="getGenrePicked"
+            />로맨스
+            <input
+              type="checkbox"
+              name="genre"
+              value="53"
+              @click="getGenrePicked"
+            />스릴러
+            <input
+              type="checkbox"
+              name="genre"
+              value="35"
+              @click="getGenrePicked"
+            />코미디
+            <input
+              type="checkbox"
+              name="genre"
+              value="14"
+              @click="getGenrePicked"
+            />판타지
+            <input
+              type="checkbox"
+              name="genre"
+              value="16"
+              @click="getGenrePicked"
+            />애니메이션
+          </fieldset>
+          <b-button type="submit" id="signup-btn" variant="light">
+            SIGN UP
+          </b-button>
         </form>
       </div>
     </div>
@@ -61,15 +108,19 @@ export default {
       password2: null,
       nickname: null,
       age: null,
+      genre_pick: null,
     };
   },
   methods: {
     signUp() {
+      this.getGenrePicked();
+
       const username = this.username;
       const password1 = this.password1;
       const password2 = this.password2;
       const nickname = this.nickname;
       const age = this.age;
+      const genre_pick = this.genre_pick;
 
       const payload = {
         username,
@@ -77,8 +128,21 @@ export default {
         password2,
         nickname,
         age,
+        genre_pick,
       };
       this.$store.dispatch("signUp", payload);
+    },
+
+    getGenrePicked(e) {
+      const genres = document.getElementsByName("genre");
+      const genre_picked = [...genres].filter((genre) => genre.checked);
+      this.genre_pick = genre_picked;
+
+      if (this.genre_pick.length > 3) {
+        alert("3개까지만 선택 가능합니다");
+        this.genre_pick.pop();
+        e.target.checked = false;
+      }
     },
   },
 };
