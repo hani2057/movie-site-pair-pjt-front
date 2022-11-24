@@ -95,16 +95,24 @@
                               :key="`${list.id}-${list.title}`"
                             >
                               <button
-                                class="my-list-modal__list-btn"
+                                class="my-list-modal__list-btn custom-btn"
                                 @focus="setChosenList"
                               >
-                                {{ list.title }}
+                                <span>{{ list.title }}</span>
                               </button>
+                              <!-- <i
+                                class="fa-solid fa-trash-can my-list-modal__list-delete-btn"
+                                @click="deleteMyList"
+                              ></i> -->
+                              <!-- <i class="fa-regular fa-trash-can"></i> -->
                             </div>
+                            <!-- <button class="my-list-modal__list-btn custom-btn">
+                              <span>test</span>
+                            </button> -->
 
                             <div>
                               <input
-                                class="my-list-modal__list-btn my-list-modal__new-list-btn"
+                                class="my-list-modal__new-list-btn"
                                 placeholder="Make New My List"
                                 @focus="changePlaceholder"
                                 @blur="resetPlaceholder"
@@ -299,7 +307,7 @@ export default {
       this.singleUserMyLists = this.$store.state.singleUserMyLists;
     },
     changePlaceholder(e) {
-      e.target.placeholder = "생성할 My List의 제목을 입력하세요";
+      e.target.placeholder = "생성할 My List의 제목을 입력하고 엔터!";
     },
     resetPlaceholder(e) {
       e.target.placeholder = "Make New My List";
@@ -337,6 +345,11 @@ export default {
         }/`,
       })
         .then((res) => {
+          console.log("chosenList", this.chosenList);
+          console.log("siglemoviedata", this.singleMovieData);
+          alert(
+            `${this.chosenList.title} 리스트에 ${this.singleMovieData.title} 영화를 추가했어요!`
+          );
           console.log(res);
         })
         .catch((err) => console.error(err));
@@ -438,25 +451,121 @@ export default {
 .my-list-modal__content {
   color: var(--main-bg-color);
 }
+
+/* 버튼 css */
+.custom-btn {
+  width: 300px;
+  height: 40px;
+  color: #fff;
+  border-radius: 5px;
+  padding: 10px 25px;
+  font-family: "Lato", sans-serif;
+  font-weight: 500;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  display: inline-block;
+  box-shadow: inset 2px 2px 2px 0px rgba(255, 255, 255, 0.5),
+    7px 7px 20px 0px rgba(0, 0, 0, 0.1), 4px 4px 5px 0px rgba(0, 0, 0, 0.1);
+  outline: none;
+  margin-bottom: 5px;
+}
 .my-list-modal__list-btn {
+  background: rgb(0, 172, 238);
+  background: linear-gradient(
+    0deg,
+    rgba(0, 172, 238, 1) 0%,
+    rgba(2, 126, 251, 1) 100%
+  );
+  width: 300px;
+  height: 40px;
+  line-height: 42px;
+  padding: 0;
+  border: none;
+}
+.my-list-modal__list-btn span {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.my-list-modal__list-btn:before,
+.my-list-modal__list-btn:after {
+  position: absolute;
+  content: "";
+  right: 0;
+  top: 0;
+  background: rgba(2, 126, 251, 1);
+  transition: all 0.3s ease;
+}
+.my-list-modal__list-btn:before {
+  height: 0%;
+  width: 2px;
+}
+.my-list-modal__list-btn:after {
+  width: 0%;
+  height: 2px;
+}
+.my-list-modal__list-btn:hover {
+  background: transparent;
+  box-shadow: none;
+}
+.my-list-modal__list-btn:hover:before {
+  height: 100%;
+}
+.my-list-modal__list-btn:hover:after {
+  width: 100%;
+}
+.my-list-modal__list-btn span:hover {
+  color: rgba(2, 126, 251, 1);
+}
+.my-list-modal__list-btn span:before,
+.my-list-modal__list-btn span:after {
+  position: absolute;
+  content: "";
+  left: 0;
+  bottom: 0;
+  background: rgba(2, 126, 251, 1);
+  transition: all 0.3s ease;
+}
+.my-list-modal__list-btn span:before {
+  width: 2px;
+  height: 0%;
+}
+.my-list-modal__list-btn span:after {
+  width: 0%;
+  height: 2px;
+}
+.my-list-modal__list-btn span:hover:before {
+  height: 100%;
+}
+.my-list-modal__list-btn span:hover:after {
+  width: 100%;
+}
+
+/* .my-list-modal__list-btn {
   width: 300px;
   height: 40px;
   background-color: var(--main-text-color);
   border: 2px solid var(--main-bg-color);
   margin-bottom: 5px;
-}
+} */
 .my-list-modal__new-list-btn {
-  background-color: rgba(0, 0, 0, 0.15);
+  width: 300px;
+  height: 40px;
+  border: 2px solid rgba(2, 126, 251, 1);
+  background: transparent;
 }
 .my-list-modal__new-list-btn::placeholder {
   text-align: center;
   color: var(--main-bg-color);
 }
-.my-list-modal__list-btn:focus {
+/* .my-list-modal__list-btn:focus {
   background-color: var(--main-bg-color);
   color: white;
   font-weight: 700;
-}
+} */
 .my-list-modal__new-list-btn:focus::placeholder {
   color: white;
   font-weight: 100;

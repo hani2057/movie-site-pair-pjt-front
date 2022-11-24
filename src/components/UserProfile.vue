@@ -60,6 +60,12 @@ export default {
           console.error(err);
         });
     },
+    deleteMyList() {
+      axios({
+        method: "delete",
+        url: `${this.$store.state.baseUrlLocalServer}/list/recommend_movie_list_delete/<int:list_pk>/`,
+      });
+    },
   },
   created() {
     this.getUserProfile();

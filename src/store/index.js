@@ -290,6 +290,7 @@ const store = new Vuex.Store({
         .catch((err) => console.error(err));
     },
     makeNewMyList() {},
+    deleteMyList() {},
   },
   modules: {},
 });
