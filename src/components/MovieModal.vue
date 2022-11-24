@@ -92,7 +92,7 @@
                           <div class="d-flex flex-column align-items-center">
                             <div
                               v-for="list in singleUserMyLists"
-                              :key="list.id"
+                              :key="`${list.id}-${list.title}`"
                             >
                               <button
                                 class="my-list-modal__list-btn"
@@ -101,12 +101,20 @@
                                 {{ list.title }}
                               </button>
                             </div>
+
                             <div>
-                              <button
+                              <input
+                                class="my-list-modal__list-btn my-list-modal__new-list-btn"
+                                placeholder="Make New My List"
+                                @focus="changePlaceholder"
+                                @blur="resetPlaceholder"
+                                @keyup.enter="makeNewMyList"
+                              />
+                              <!-- <button
                                 class="my-list-modal__list-btn my-list-modal__new-list-btn"
                               >
                                 Make New My List
-                              </button>
+                              </button> -->
                             </div>
                           </div>
                         </template>
@@ -229,9 +237,8 @@ export default {
   },
   watch: {
     singleMovieData() {},
-    singleMovieReviews(val) {
-      console.log("review watch", val);
-    },
+    singleMovieReviews() {},
+    singleUserMyLists() {},
   },
   methods: {
     closeModal() {
@@ -289,6 +296,35 @@ export default {
     },
     loadUserMyLists() {
       this.$store.dispatch("getSingleUserMyLists");
+      this.singleUserMyLists = this.$store.state.singleUserMyLists;
+    },
+    changePlaceholder(e) {
+      e.target.placeholder = "생성할 My List의 제목을 입력하세요";
+    },
+    resetPlaceholder(e) {
+      e.target.placeholder = "Make New My List";
+    },
+    makeNewMyList(e) {
+      axios({
+        method: "post",
+        url: `${this.$store.state.baseUrlLocalServer}/list/recommend_movie_list_create/`,
+        data: {
+          title: e.target.value,
+        },
+        headers: {
+          Authorization: `Token ${this.$store.state.token}`,
+        },
+      })
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => console.error(err));
+
+      e.target.value = "";
+      e.target.blur();
+
+      this.loadUserMyLists();
+      this.$forceUpdate;
     },
     addSingleMovieToList() {
       console.log(this.chosenList);
@@ -391,6 +427,10 @@ export default {
 .putMovieToListBtn {
   color: var(----main-text-color) !important;
 }
+.putMovieToListBtn:hover {
+  color: white !important;
+  font-weight: 500 !important;
+}
 #my-list-modal {
   font-family: "Ubuntu", Helvetica, Arial, sans-serif;
 }
@@ -401,21 +441,31 @@ export default {
 .my-list-modal__list-btn {
   width: 300px;
   height: 40px;
-  background-color: var(----main-text-color);
+  background-color: var(--main-text-color);
   border: 2px solid var(--main-bg-color);
   margin-bottom: 5px;
 }
 .my-list-modal__new-list-btn {
   background-color: rgba(0, 0, 0, 0.15);
 }
+.my-list-modal__new-list-btn::placeholder {
+  text-align: center;
+  color: var(--main-bg-color);
+}
 .my-list-modal__list-btn:focus {
   background-color: var(--main-bg-color);
   color: white;
   font-weight: 700;
 }
+.my-list-modal__new-list-btn:focus::placeholder {
+  color: white;
+  font-weight: 100;
+  font-size: 0.8rem;
+}
 .trailerBtn {
   width: 110px;
   height: 75px;
+  font-size: 0.9rem;
 }
 .modal-card__info-review-post {
   border-top: 1px solid #b3b3b3;

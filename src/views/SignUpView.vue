@@ -59,46 +59,52 @@
               type="checkbox"
               name="genre"
               value="28"
+              id="genre-pick-action"
               @click="getGenrePicked"
             />
-            <span>액션</span>
+            <label for="genre-pick-action">액션</label>
             <input
               type="checkbox"
               name="genre"
               value="10749"
+              id="genre-pick-romance"
               @click="getGenrePicked"
             />
-            <span>로맨스</span>
+            <label for="genre-pick-romance">로맨스</label>
             <input
               type="checkbox"
               name="genre"
               value="53"
+              id="genre-pick-thriller"
               @click="getGenrePicked"
             />
-            <span>스릴러</span>
+            <label for="genre-pick-thriller">스릴러</label>
             <input
               type="checkbox"
               name="genre"
               value="35"
+              id="genre-pick-comedy"
               @click="getGenrePicked"
             />
-            <span>코미디</span>
+            <label for="genre-pick-comedy">코미디</label>
             <input
               type="checkbox"
               name="genre"
               value="14"
+              id="genre-pick-fantasy"
               @click="getGenrePicked"
             />
-            <span>판타지</span>
+            <label for="genre-pick-fantasy">판타지</label>
             <input
               type="checkbox"
               name="genre"
               value="16"
+              id="genre-pick-animation"
               @click="getGenrePicked"
             />
-            <span>애니메이션</span>
+            <label for="genre-pick-animation">애니메이션</label>
           </fieldset>
-          <b-button type="submit" id="signup-btn" variant="light">
+          <b-button type="submit" id="signup-btn" variant="light" class="mt-3">
             SIGN UP
           </b-button>
         </form>
@@ -175,39 +181,32 @@ export default {
 <style>
 /* input style 초기화 */
 /* input 기본 스타일 초기화 */
-.signup__input,
-.login__input {
+.signup__input {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
   background: none;
   border: none;
 }
-.signup__input:focus,
-.login__input:focus {
+.signup__input:focus {
   outline: none;
 }
 /* IE10 이상에서 input box에 추가된 지우기 버튼 제거 */
-.singup__input::-ms-clear,
-.login__input::-ms-clear {
+.singup__input::-ms-clear {
   display: none;
 }
 /* input type nubmer에서 화살표 제거 */
 .signup__input[type="number"]::-webkit-inner-spin-button,
-.signup__input[type="number"]::-webkit-outer-spin-button,
-.login__input[type="number"]::-webkit-inner-spin-button,
-.login__input[type="number"]::-webkit-outer-spin-button {
+.signup__input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
 }
-.signup__input[type="number"],
-.login__input[type="number"] {
+.signup__input[type="number"] {
   -moz-appearance: textfield;
 }
 /* IE에서 비밀번호 보이기/숨기기 눈 없애기 */
-.signup__input[type="password"]::-ms-reveal,
-.login__input[type="password"]::-ms-clear {
+.signup__input[type="password"]::-ms-reveal {
   display: none;
 }
 /* Select box 스타일 초기화 */
@@ -258,10 +257,17 @@ select::-ms-expand {
     box-shadow: 2px 2px 5px rgba(255, 255, 255, 0.3);
   }
 }
+.genre-choise legend {
+  font-weight: 400;
+}
 .genre-choise input {
   margin-right: 5px;
+  background-color: rgba(255, 255, 255, 0.3);
+  cursor: pointer;
 }
-.genre-choise span {
+.genre-choise label {
   margin-right: 10px;
+  font-weight: 300;
+  cursor: pointer;
 }
 </style>

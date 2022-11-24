@@ -80,6 +80,9 @@ const store = new Vuex.Store({
 
       return singleMovieDataGenres;
     },
+    singleUserMyLists(state) {
+      return state.singleUserMyLists;
+    },
     // isModalOpened(state) {
     //   return state.isModalOpened;
     // },
@@ -171,14 +174,14 @@ const store = new Vuex.Store({
         },
       })
         .then((res) => {
-          alert("로그인성공");
+          // alert("로그인성공");
           context.commit("SAVE_TOKEN", res.data.key);
           context.commit("SAVE_USERNAME", username);
           context.commit("CHANGE_LOG_IN_STATE");
           router.push({ name: "main" });
         })
         .catch((err) => {
-          alert("로그인실패");
+          // alert("로그인실패");
           console.error(err);
         });
     },
@@ -191,14 +194,14 @@ const store = new Vuex.Store({
         },
       })
         .then(() => {
-          alert("로그아웃성공");
+          // alert("로그아웃성공");
           VueCookie.remove("id");
           context.commit("DELETE_TOKEN");
           context.commit("DELETE_USERNAME");
           context.commit("CHANGE_LOG_IN_STATE");
         })
         .catch((err) => {
-          alert("로그아웃실패");
+          // alert("로그아웃실패");
           console.log(err);
         });
     },
@@ -239,7 +242,7 @@ const store = new Vuex.Store({
       })
         .then((res) => {
           context.commit("SET_SINGLE_MOVIE_DATA", res.data);
-          console.log(res);
+          // console.log(res);
         })
         .catch((err) => console.error(err));
     },
@@ -250,7 +253,7 @@ const store = new Vuex.Store({
         url: `${context.state.baseUrlLocalServer}/movies/detail/${movieId}/comment/`,
       })
         .then((res) => {
-          console.log("리뷰", res);
+          // console.log("리뷰", res);
           context.commit("SET_SINGLE_MOVIE_REVIEWS", res.data);
         })
         .catch((err) => console.error(err));
@@ -286,6 +289,7 @@ const store = new Vuex.Store({
         })
         .catch((err) => console.error(err));
     },
+    makeNewMyList() {},
   },
   modules: {},
 });

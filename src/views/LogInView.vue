@@ -22,15 +22,15 @@
             placeholder="PASSWORD"
             v-model="password"
           />
-          <button type="submit" id="login-btn">LOG IN</button>
+          <b-button type="submit" id="login-btn" variant="light" class="mt-3">
+            LOG IN
+          </b-button>
         </form>
-        <p>회원가입하러 가기</p>
-        <button type="text" id="login-to-signup-btn">SIGN UP</button>
-
-        <!-- <CookieTest/> -->
-        <!-- <a @click="getTest">get cookie</a><br />
-          <a @click="setTest">set cookie</a><br />
-          <a @click="resetTest">reset cookie</a><br /> -->
+        <router-link :to="{ name: 'signup' }" id="link-to-signup"
+          >회원가입하러 가기</router-link
+        >
+        <!-- <a>회원가입하러 가기</a> -->
+        <!-- <button type="text" id="login-to-signup-btn">SIGN UP</button> -->
       </div>
     </div>
   </div>
@@ -86,7 +86,45 @@ export default {
 </script>
 
 <style>
-/* input style 초기화 CSS는 SignUpView에 함께 있음 */
+/* input style 초기화 */
+.login__input {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background: none;
+  border: none;
+}
+.login__input:focus {
+  outline: none;
+}
+/* IE10 이상에서 input box에 추가된 지우기 버튼 제거 */
+.login__input::-ms-clear {
+  display: none;
+}
+/* input type nubmer에서 화살표 제거 */
+.login__input[type="number"]::-webkit-inner-spin-button,
+.login__input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+.login__input[type="number"] {
+  -moz-appearance: textfield;
+}
+/* IE에서 비밀번호 보이기/숨기기 눈 없애기 */
+.login__input[type="password"]::-ms-clear {
+  display: none;
+}
+/* Select box 스타일 초기화 */
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+/* IE 에서 Select box 화살표 제거 */
+select::-ms-expand {
+  display: none;
+}
 
 /* CSS적용 */
 .login-page {
@@ -124,5 +162,8 @@ export default {
   to {
     box-shadow: 2px 2px 5px rgba(255, 255, 255, 0.3);
   }
+}
+#link-to-signup {
+  text-decoration: none;
 }
 </style>
