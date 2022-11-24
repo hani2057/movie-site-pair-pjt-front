@@ -124,12 +124,17 @@ const store = new Vuex.Store({
   },
   actions: {
     signUp(context, payload) {
-      const { username, password1, password2, nickname, age, genre_pick } =
-        payload;
+      const {
+        username,
+        password1,
+        password2,
+        nickname,
+        age,
+        genre_pick_1,
+        genre_pick_2,
+      } = payload;
 
-      const genre_pick_1 = genre_pick[0];
-      const genre_pick_2 = genre_pick[1] || null;
-      const genre_pick_3 = genre_pick[2] || null;
+      console.log(genre_pick_1, genre_pick_2);
 
       axios({
         method: "post",
@@ -142,7 +147,6 @@ const store = new Vuex.Store({
           age,
           genre_pick_1,
           genre_pick_2,
-          genre_pick_3,
         },
       })
         .then((res) => {

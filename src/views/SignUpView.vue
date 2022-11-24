@@ -21,6 +21,7 @@
             id="signup-password1"
             class="signup__input"
             placeholder="PASSWORD"
+            minlength="6"
             required
             v-model="password1"
           />
@@ -29,6 +30,7 @@
             id="signup-password2"
             class="signup__input"
             placeholder="PASSWORD CONFIRMATION"
+            minlength="6"
             required
             v-model="password2"
           />
@@ -129,6 +131,19 @@ export default {
       const nickname = this.nickname;
       const age = this.age;
       const genre_pick = this.genre_pick;
+      let genre_pick_1;
+      let genre_pick_2;
+
+      if (genre_pick.length === 0) {
+        genre_pick_1 = null;
+        genre_pick_2 = null;
+      } else if (genre_pick.length === 1) {
+        genre_pick_1 = genre_pick[0].value;
+        genre_pick_2 = null;
+      } else if (genre_pick.length === 2) {
+        genre_pick_1 = genre_pick[0].value;
+        genre_pick_2 = genre_pick[1].value;
+      }
 
       const payload = {
         username,
@@ -136,7 +151,8 @@ export default {
         password2,
         nickname,
         age,
-        genre_pick,
+        genre_pick_1,
+        genre_pick_2,
       };
       this.$store.dispatch("signUp", payload);
     },
@@ -146,8 +162,8 @@ export default {
       const genre_picked = [...genres].filter((genre) => genre.checked);
       this.genre_pick = genre_picked;
 
-      if (this.genre_pick.length > 3) {
-        alert("3개까지만 선택 가능합니다");
+      if (this.genre_pick.length > 2) {
+        alert("2개까지만 선택 가능합니다");
         this.genre_pick.pop();
         e.target.checked = false;
       }

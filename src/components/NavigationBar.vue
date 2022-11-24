@@ -96,6 +96,7 @@ export default {
 .nav-item__login,
 .nav-item__signup {
   display: inline-block;
+  padding-top: 15px;
 }
 .dropdown-menu {
   background-color: var(--main-bg-color);

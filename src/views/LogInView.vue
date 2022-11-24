@@ -2,7 +2,7 @@
   <div class="component-wrapper">
     <div class="login-page d-flex justify-content-center align-items-center">
       <div class="login-wrapper d-flex flex-column align-items-center">
-        <h1 class="pb-4">LogIn Page</h1>
+        <h1 class="pb-4">L o g I n</h1>
         <form
           @submit.prevent="logIn"
           id="login-form"
