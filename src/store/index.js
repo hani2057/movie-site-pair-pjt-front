@@ -21,11 +21,11 @@ const store = new Vuex.Store({
     baseUrlTMDB: "https://api.themoviedb.org/3",
     paramsTMDB: {
       // api_key: process.env.MOVIE_DB_API_KEY,
-      api_key: "1c2f0f92339bff124d15c1fa1db21c85",
+      api_key: process.env.VUE_APP_TMDB_API_KEY,
       language: "ko-KR",
     },
     paramsTMDBVideo: {
-      api_key: "1c2f0f92339bff124d15c1fa1db21c85",
+      api_key: process.env.VUE_APP_TMDB_API_KEY,
     },
     baseUrlLocalServer: "http://127.0.0.1:8000",
     baseUrlTMDBImg: "https://image.tmdb.org/t/p/original/",
