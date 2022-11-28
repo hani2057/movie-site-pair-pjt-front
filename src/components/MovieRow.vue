@@ -25,7 +25,7 @@
             />
             <div
               class="row__poster-hide"
-              v-if="movie.adult && !$store.state.isUserAdult"
+              v-if="movie.adult && $store.state.isUserAdult"
             ></div>
             <span class="row__posterTitle">{{ movie.title }}</span>
           </div>
@@ -43,6 +43,7 @@
 
 <script>
 import axios from "axios";
+import { movieInstance } from "@/api/axios";
 
 export default {
   name: "MovieRow",
@@ -96,18 +97,28 @@ export default {
         })
         .catch((err) => console.error(err));
     } else {
-      // params = "";
+      const params = this.$store.state.paramsTMDB;
 
-      axios({
-        method: "get",
-        url: `${baseURL}${this.fetchUrl}`,
-        params: this.$store.state.paramsTMDB,
-      })
+      movieInstance
+        .get(`${this.fetchUrl}`, params)
         .then((res) => {
+          console.log(res);
           this.movies = res.data.results || res.data;
-          // this.movies = res.data;
         })
         .catch((err) => console.error(err));
+
+      // params = "";
+
+      // axios({
+      //   method: "get",
+      //   url: `${baseURL}${this.fetchUrl}`,
+      //   params: this.$store.state.paramsTMDB,
+      // })
+      //   .then((res) => {
+      //     this.movies = res.data.results || res.data;
+      //     // this.movies = res.data;
+      //   })
+      //   .catch((err) => console.error(err));
     }
   },
 };

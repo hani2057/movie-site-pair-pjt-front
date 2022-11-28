@@ -9,7 +9,7 @@
       />
       <MovieRow
         title="Now Playing"
-        id="NP"
+        id="nowPlaying"
         :fetchUrl="this.urlNowPlaying"
         :isLargeRow="false"
       />
@@ -21,7 +21,7 @@
               <b-card-text>
                 <MovieGenre
                   title="Top Rated"
-                  id="TR"
+                  id="topRated"
                   :fetchUrl="this.urlTopRated"
                 />
               </b-card-text>
@@ -30,7 +30,7 @@
               <b-card-text>
                 <MovieGenre
                   title="Action Movies"
-                  id="AM"
+                  id="actionMovies"
                   :fetchUrl="this.urlActionMovies"
                 />
               </b-card-text>
@@ -40,7 +40,7 @@
               <b-card-text>
                 <MovieGenre
                   title="Romance Movies"
-                  id="RM"
+                  id="romanceMovies"
                   :fetchUrl="this.urlRomanceMovies"
                 />
               </b-card-text>
@@ -49,7 +49,7 @@
               <b-card-text>
                 <MovieGenre
                   title="Thriller Movies"
-                  id="TM"
+                  id="thrillerMovies"
                   :fetchUrl="this.urlThrillerMovies"
                 />
               </b-card-text>
@@ -58,7 +58,7 @@
               <b-card-text>
                 <MovieGenre
                   title="Comedy Movies"
-                  id="CM"
+                  id="comedyMovies"
                   :fetchUrl="this.urlComedyMovies"
                 />
               </b-card-text>
@@ -67,7 +67,7 @@
               <b-card-text>
                 <MovieGenre
                   title="Fantasy Movies"
-                  id="FM"
+                  id="fantasyMovies"
                   :fetchUrl="this.urlFantasyMovies"
                 />
               </b-card-text>
@@ -76,7 +76,7 @@
               <b-card-text>
                 <MovieGenre
                   title="Animations"
-                  id="AN"
+                  id="animations"
                   :fetchUrl="this.urlAnimations"
                 />
               </b-card-text>
