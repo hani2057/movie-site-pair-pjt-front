@@ -50,17 +50,18 @@ export default {
     handleMovieClick(movie) {
       this.$store.dispatch("handleMovieClick", movie);
     },
-    async getMovies() {
-      const params = this.$store.state.paramsTMDB;
-      console.log(params);
-      const { data } = await movieInstance.get(`${this.fetchUrl}`, params);
-      console.log(data);
-    },
   },
   created() {
-    this.getMovies();
     // const baseURL = this.$store.state.baseUrlTMDB;
-    // // const params = this.$store.state.paramsTMDB;
+    const params = this.$store.state.paramsTMDB;
+
+    movieInstance
+      .get(`${this.fetchUrl}`, params)
+      .then((res) => {
+        console.log(res);
+        this.movies = res.data.results || res.data;
+      })
+      .catch((err) => console.error(err));
 
     // axios({
     //   method: "get",

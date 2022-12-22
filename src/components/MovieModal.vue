@@ -196,7 +196,6 @@
 
 <script>
 import axios from "axios";
-import { movieApi } from "@/api/requests.js";
 import StarRating from "vue-star-rating";
 // https://github.com/craigh411/vue-star-rating
 
@@ -248,41 +247,35 @@ export default {
       this.$store.commit("CHANGE_MODAL_OPEN_STATE");
       this.$store.commit("DELETE_SINGLE_MOVIE_REVIEWS");
     },
-    async showTrailer() {
-      const { data } = await movieApi.showTrailer(
-        this.singleMovieData.id || this.singleMovieData.movie_id
-      );
-      console.log(data);
+    showTrailer() {
+      console.log(this.singleMovieData);
+      axios({
+        method: "get",
+        url: `${this.$store.state.baseUrlTMDB}/movie/${
+          this.singleMovieData.id || this.singleMovieData.movie_id
+        }/videos`,
+        params: this.$store.state.paramsTMDBVideo,
+      })
+        .then((res) => {
+          if (res.data.results) {
+            this.trailerExists = true;
+            this.youtubeId = res.data.results[0]?.key;
+
+            const singleMovieTrailer =
+              document.getElementById("singleMovieTrailer");
+            console.log(singleMovieTrailer);
+            // const iframeHeight =
+            //   singleMovieTrailer.contentWindow.document.body.scrollHeight;
+
+            // singleMovieTrailer.height = iframeHeight;
+            singleMovieTrailer.setAttribute(
+              "src",
+              `https://www.youtube.com/embed/${this.youtubeId}?autoplay=1`
+            );
+          }
+        })
+        .catch((err) => console.error(err));
     },
-    // showTrailer() {
-    //   console.log(this.singleMovieData);
-    //   axios({
-    //     method: "get",
-    //     url: `${this.$store.state.baseUrlTMDB}/movie/${
-    //       this.singleMovieData.id || this.singleMovieData.movie_id
-    //     }/videos`,
-    //     params: this.$store.state.paramsTMDBVideo,
-    //   })
-    //     .then((res) => {
-    //       if (res.data.results) {
-    //         this.trailerExists = true;
-    //         this.youtubeId = res.data.results[0]?.key;
-
-    //         const singleMovieTrailer =
-    //           document.getElementById("singleMovieTrailer");
-    //         console.log(singleMovieTrailer);
-    //         // const iframeHeight =
-    //         //   singleMovieTrailer.contentWindow.document.body.scrollHeight;
-
-    //         // singleMovieTrailer.height = iframeHeight;
-    //         singleMovieTrailer.setAttribute(
-    //           "src",
-    //           `https://www.youtube.com/embed/${this.youtubeId}?autoplay=1`
-    //         );
-    //       }
-    //     })
-    //     .catch((err) => console.error(err));
-    // },
     getMovieReviews() {
       console.log(this.singleMovieData);
       const movieId = this.singleMovieData.id || this.singleMovieData.movie_id;

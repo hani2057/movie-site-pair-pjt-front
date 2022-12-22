@@ -5,7 +5,6 @@ import createPersistedState from "vuex-persistedstate";
 import VueCookie from "vue-cookies";
 
 import router from "@/router/index";
-import { localApi } from "@/api/requests.js";
 
 Vue.use(Vuex);
 
@@ -156,45 +155,40 @@ const store = new Vuex.Store({
   },
 
   actions: {
-    async signUp(context, payload) {
-      const { data } = await localApi.signUp(payload);
-      console.log(data);
+    signUp(context, payload) {
+      const {
+        username,
+        password1,
+        password2,
+        nickname,
+        age,
+        genre_pick_1,
+        genre_pick_2,
+      } = payload;
 
-      // const {
-      //   username,
-      //   password1,
-      //   password2,
-      //   nickname,
-      //   age,
-      //   genre_pick_1,
-      //   genre_pick_2,
-      // } = payload;
+      console.log(genre_pick_1, genre_pick_2);
 
-      // console.log(genre_pick_1, genre_pick_2);
-
-      // axios({
-      //   method: "post",
-      //   url: `${context.state.baseUrlLocalServer}/accounts/signup/`,
-      //   data: {
-      //     username,
-      //     password1,
-      //     password2,
-      //     nickname,
-      //     age,
-      //     genre_pick_1,
-      //     genre_pick_2,
-      //   },
-      // })
-      // localApi
-      //   .signUp(payload)
-      //   .then((res) => {
-      //     // console.log(res)
-      //     context.commit("SAVE_TOKEN", res.data.key);
-      //     router.push({ name: "login" });
-      //   })
-      //   .catch((err) => {
-      //     console.log(err);
-      //   });
+      axios({
+        method: "post",
+        url: `${context.state.baseUrlLocalServer}/accounts/signup/`,
+        data: {
+          username,
+          password1,
+          password2,
+          nickname,
+          age,
+          genre_pick_1,
+          genre_pick_2,
+        },
+      })
+        .then((res) => {
+          // console.log(res)
+          context.commit("SAVE_TOKEN", res.data.key);
+          router.push({ name: "login" });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
 
     logIn(context, payload) {

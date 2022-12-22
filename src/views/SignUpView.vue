@@ -114,8 +114,6 @@
 </template>
 
 <script>
-import { localApi } from "@/api/requests.js";
-
 export default {
   name: "SignUpView",
 
@@ -130,41 +128,7 @@ export default {
     };
   },
   methods: {
-    // signUp() {
-    //   this.getGenrePicked();
-
-    //   const username = this.username;
-    //   const password1 = this.password1;
-    //   const password2 = this.password2;
-    //   const nickname = this.nickname;
-    //   const age = this.age;
-    //   const genre_pick = this.genre_pick;
-    //   let genre_pick_1;
-    //   let genre_pick_2;
-
-    //   if (genre_pick.length === 0) {
-    //     genre_pick_1 = null;
-    //     genre_pick_2 = null;
-    //   } else if (genre_pick.length === 1) {
-    //     genre_pick_1 = genre_pick[0].value;
-    //     genre_pick_2 = null;
-    //   } else if (genre_pick.length === 2) {
-    //     genre_pick_1 = genre_pick[0].value;
-    //     genre_pick_2 = genre_pick[1].value;
-    //   }
-
-    //   const payload = {
-    //     username,
-    //     password1,
-    //     password2,
-    //     nickname,
-    //     age,
-    //     genre_pick_1,
-    //     genre_pick_2,
-    //   };
-    //   this.$store.dispatch("signUp", payload);
-    // },
-    async signUp() {
+    signUp() {
       this.getGenrePicked();
 
       const username = this.username;
@@ -196,8 +160,7 @@ export default {
         genre_pick_1,
         genre_pick_2,
       };
-      const { data } = await localApi.signup(payload);
-      console.log(data);
+      this.$store.dispatch("signUp", payload);
     },
 
     getGenrePicked(e) {

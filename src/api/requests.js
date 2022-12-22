@@ -1,20 +1,7 @@
-import {
-  movieInstance,
-  localInstance,
-  // localAuthInstance,
-} from "@/api/axios.js";
+import movieInstance from "@/api/axios";
 
 export const movieApi = {
-  // nowPlaying: () => movieInstance.get("movie/now_playing"),
-  showTrailer: (id) => movieInstance.get(`movie/${id}/videos`),
-};
-
-export const localApi = {
-  signUp: (payload) => {
-    localInstance.post("accounts/signup/", {
-      data: payload,
-    });
-  },
+  nowPlaying: () => movieInstance.get("movie/now_playing"),
 };
 // urlRecommendations: "/movies/",
 //       urlNowPlaying: "/movie/now_playing",
