@@ -86,8 +86,6 @@
       </div>
 
       <div>
-        <!-- <router-view></router-view>
-      <router-link :to="{name: 'movieTitle', params={movieId: singleMovieData.id}}"></router-link> -->
         <MovieModal
           v-if="isModalOpened"
           :singleMovieData="{ ...singleMovieData }"
