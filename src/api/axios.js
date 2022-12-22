@@ -1,36 +1,33 @@
 import axios from "axios";
-// import store from "@/store/index";
 
 const TMDB_BASE_URL = "https://api.themoviedb.org/3";
-// const TMDB_IMG_URL: "https://image.tmdb.org/t/p/original/",
+const TMDB_IMG_URL: "https://image.tmdb.org/t/p/original/",
 
 const LOCAL_BASE_URL = "http://127.0.0.1:8000";
 
-const paramsTMDB = {
-  api_key: process.env.VUE_APP_TMDB_API_KEY,
-  language: "ko-KR",
-};
-
 const axiosApi = (url, options) => {
-  const instance = axios.create({ baseURL: url, ...options });
-  return instance;
-};
+  const instance = axios.create({baseURL: url, ...options})
+  return instance
+}
 
 const axiosAuthApi = (url, options) => {
-  // const token = store.state.token;
+  const token = 
   const instance = axios.create({
     baseURL: url,
-    // headers: {
-    //   Authorization: `Token ${token}`,
-    // },
-    ...options,
-  });
-  return instance;
-};
+    headers: {
+      Authorization: `Token ${}`
+    },
+    ...options
+  })
+  return instance
+}
 
-export const movieInstance = axiosApi(TMDB_BASE_URL, paramsTMDB);
-export const localInstance = axiosApi(LOCAL_BASE_URL);
-export const localAuthInstance = axiosAuthApi(LOCAL_BASE_URL);
+export const defaultInstance = axiosApi(TMDB_BASE_URL)
+export const authInstance = axiosAuthApi(LOCAL_BASE_URL)
+
+
+
+
 
 // const api_tmdb = axios.create({
 //   baseURL: "https://api.themoviedb.org/3",
@@ -43,6 +40,9 @@ export const localAuthInstance = axiosAuthApi(LOCAL_BASE_URL);
 //     language: "ko-KR",
 //   },
 // });
+
+
+
 
 // export const apis_tmdb = {
 //   get: () => api_tmdb.get(),

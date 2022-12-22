@@ -31,8 +31,7 @@
 </template>
 
 <script>
-// import axios from "axios";
-import { movieInstance } from "@/api/axios";
+import axios from "axios";
 
 export default {
   name: "MovieGenre",
@@ -52,26 +51,17 @@ export default {
     },
   },
   created() {
-    // const baseURL = this.$store.state.baseUrlTMDB;
-    const params = this.$store.state.paramsTMDB;
+    const baseURL = this.$store.state.baseUrlTMDB;
 
-    movieInstance
-      .get(`${this.fetchUrl}`, params)
+    axios({
+      method: "get",
+      url: `${baseURL}${this.fetchUrl}`,
+      params: this.$store.state.paramsTMDB,
+    })
       .then((res) => {
-        console.log(res);
-        this.movies = res.data.results || res.data;
+        this.movies = res.data.results;
       })
       .catch((err) => console.error(err));
-
-    // axios({
-    //   method: "get",
-    //   url: `${baseURL}${this.fetchUrl}`,
-    //   params: this.$store.state.paramsTMDB,
-    // })
-    //   .then((res) => {
-    //     this.movies = res.data.results;
-    //   })
-    //   .catch((err) => console.error(err));
   },
 };
 </script>
